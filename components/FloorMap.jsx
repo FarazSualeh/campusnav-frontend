@@ -14,7 +14,6 @@ const CATEGORY_COLORS = {
 
 const ROUTE_COLOR = "#C1571F";
 const ROUTE_GLOW_COLOR = "#F4A261";
-const CORRIDOR_COLOR = "#E2DEC F".replace(" ", ""); // #E2DECF
 const START_COLOR = "#2A9D8F";
 const END_COLOR = "#E76F51";
 

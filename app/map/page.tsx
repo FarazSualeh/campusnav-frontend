@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import FloorMap from "@/components/FloorMap";
@@ -30,39 +30,24 @@ function MapPageContent() {
   const [selectedRoomInfo, setSelectedRoomInfo] = useState<NavLocation | null>(null);
   const [mobileTab, setMobileTab] = useState<"map" | "search">("map");
 
-  const [activeFloor, setActiveFloor] = useState("3");
-  const [floorNotice, setFloorNotice] = useState<string | null>(null);
+  const startParam = searchParams.get("start") || searchParams.get("from");
+  const destParam = searchParams.get("to") || searchParams.get("dest") || searchParams.get("destination");
+  const floorParam = searchParams.get("floor");
+
+  const [selectedFloor, setSelectedFloor] = useState<string | null>(null);
+  const activeFloor = selectedFloor || (floorParam && FLOORS.some((f) => f.id === floorParam) ? floorParam : "3");
+  const floorNotice =
+    activeFloor !== "3"
+      ? `Floor ${activeFloor} blueprint is coming soon! Routing via Staircase (N0) for inter-floor transition.`
+      : null;
 
   // Modal for QR Code generation
   const [qrLocation, setQrLocation] = useState<NavLocation | null>(null);
   const [isQrOpen, setIsQrOpen] = useState(false);
 
-  // Initial locations parsed from URL search params (e.g. ?start=N0&to=R-SERVER or ?start=304)
-  const [initialStart, setInitialStart] = useState<NavLocation | null>(null);
-  const [initialDest, setInitialDest] = useState<NavLocation | null>(null);
-
-  useEffect(() => {
-    const startParam = searchParams.get("start") || searchParams.get("from");
-    const destParam = searchParams.get("to") || searchParams.get("dest") || searchParams.get("destination");
-    const floorParam = searchParams.get("floor");
-
-    if (floorParam && FLOORS.some((f) => f.id === floorParam)) {
-      setActiveFloor(floorParam);
-      if (floorParam !== "3") {
-        setFloorNotice(`Floor ${floorParam} detailed blueprint is under mapping. Displaying 3rd Floor entrance transition.`);
-      }
-    }
-
-    if (startParam) {
-      const s = findLocationByCodeOrId(startParam);
-      if (s) setInitialStart(s);
-    }
-
-    if (destParam) {
-      const d = findLocationByCodeOrId(destParam);
-      if (d) setInitialDest(d);
-    }
-  }, [searchParams]);
+  // Initial locations parsed from URL search params
+  const initialStart = React.useMemo(() => (startParam ? findLocationByCodeOrId(startParam) || null : null), [startParam]);
+  const initialDest = React.useMemo(() => (destParam ? findLocationByCodeOrId(destParam) || null : null), [destParam]);
 
   const handleRoomClick = (roomId: string) => {
     setSelectedRoomId(roomId);
@@ -71,14 +56,7 @@ function MapPageContent() {
   };
 
   const handleFloorSelect = (floorId: string) => {
-    setActiveFloor(floorId);
-    if (floorId !== "3") {
-      setFloorNotice(
-        `Floor ${floorId} blueprint is coming soon! Routing via Staircase (N0) for inter-floor transition.`
-      );
-    } else {
-      setFloorNotice(null);
-    }
+    setSelectedFloor(floorId);
   };
 
   return (
@@ -142,16 +120,13 @@ function MapPageContent() {
           <span>{floorNotice}</span>
           <button
             type="button"
-            onClick={() => {
-              setActiveFloor("3");
-              setFloorNotice(null);
-            }}
+            onClick={() => setSelectedFloor("3")}
             className="underline ml-2 hover:text-white"
           >
             Return to Floor 3
           </button>
         </div>
-      )}
+      )}      )
 
       {/* Mobile Switcher Tab Bar */}
       <div className="md:hidden flex border-b border-slate-200 bg-white sticky top-[57px] z-20">
@@ -232,7 +207,7 @@ function MapPageContent() {
                 className="mt-1 w-full py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
               >
                 <span>📱</span>
-                <span>Generate "You Are Here" QR Code</span>
+                <span>Generate &quot;You Are Here&quot; QR Code</span>
               </button>
             </div>
           )}
@@ -245,7 +220,7 @@ function MapPageContent() {
             </div>
             <ul className="list-disc list-inside space-y-1 text-slate-600 text-[11.5px] leading-relaxed">
               <li>Click directly on any room in the floor plan to set it as destination.</li>
-              <li>Use the <strong>"Get QR Code"</strong> button to generate scannable location links.</li>
+              <li>Use the <strong>&quot;Get QR Code&quot;</strong> button to generate scannable location links.</li>
               <li>Staircase (N0) connects the 3rd floor corridor to other building floors.</li>
             </ul>
           </div>

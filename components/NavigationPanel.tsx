@@ -47,14 +47,15 @@ export default function NavigationPanel({
   const allLocations = useMemo(() => getLocations(), []);
 
   // Default start is Staircase (Floor entry point)
-  const defaultStart = allLocations.find((l) => l.nodeId === "N0") || allLocations[0];
+  const defaultStart = useMemo(() => allLocations.find((l) => l.nodeId === "N0") || allLocations[0], [allLocations]);
+  const effectiveInitialStart = initialStart !== undefined ? initialStart : defaultStart;
 
-  const [startQuery, setStartQuery] = useState("");
-  const [startLocation, setStartLocation] = useState<NavLocation | null>(null);
+  const [startQuery, setStartQuery] = useState(effectiveInitialStart?.name || "");
+  const [startLocation, setStartLocation] = useState<NavLocation | null>(effectiveInitialStart || null);
   const [isStartOpen, setIsStartOpen] = useState(false);
 
-  const [destQuery, setDestQuery] = useState("");
-  const [destLocation, setDestLocation] = useState<NavLocation | null>(null);
+  const [destQuery, setDestQuery] = useState(initialDest?.name || "");
+  const [destLocation, setDestLocation] = useState<NavLocation | null>(initialDest || null);
   const [isDestOpen, setIsDestOpen] = useState(false);
 
   const [activeCategory, setActiveCategory] = useState("All");
@@ -70,35 +71,42 @@ export default function NavigationPanel({
   const startRef = useRef<HTMLDivElement>(null);
   const destRef = useRef<HTMLDivElement>(null);
 
-  // Initialize from props or default
-  useEffect(() => {
-    const s = initialStart !== undefined ? initialStart : defaultStart;
-    if (s) {
-      setStartLocation(s);
-      setStartQuery(s.name);
+  // Sync when initialStart prop updates during render
+  const [prevInitialStart, setPrevInitialStart] = useState(initialStart);
+  if (initialStart !== prevInitialStart) {
+    setPrevInitialStart(initialStart);
+    if (initialStart) {
+      setStartLocation(initialStart);
+      setStartQuery(initialStart.name);
     }
+  }
+
+  // Sync when initialDest prop updates during render
+  const [prevInitialDest, setPrevInitialDest] = useState(initialDest);
+  if (initialDest !== prevInitialDest) {
+    setPrevInitialDest(initialDest);
     if (initialDest) {
       setDestLocation(initialDest);
       setDestQuery(initialDest.name);
     }
-  }, [initialStart, initialDest]);
+  }
 
-
-  // Sync when user clicks a room on the floor map
-  useEffect(() => {
-    if (!selectedRoomId) return;
-
-    const loc = findLocation(selectedRoomId);
-    if (!loc) return;
-
-    // If destination is not selected, set destination
-    if (!destLocation || destLocation.id !== loc.id) {
-      setDestLocation(loc);
-      setDestQuery(loc.name);
-      setIsDestOpen(false);
-      setErrorMessage(null);
+  // Sync when user clicks a room on the floor map during render
+  const [prevSelectedRoomId, setPrevSelectedRoomId] = useState(selectedRoomId);
+  if (selectedRoomId !== prevSelectedRoomId) {
+    setPrevSelectedRoomId(selectedRoomId);
+    if (selectedRoomId) {
+      const loc = findLocation(selectedRoomId);
+      if (loc) {
+        setDestLocation(loc);
+        setDestQuery(loc.name);
+        setIsDestOpen(false);
+        setErrorMessage(null);
+      }
     }
-  }, [selectedRoomId]);
+  }
+
+
 
   // Close dropdowns on outside click
   useEffect(() => {
