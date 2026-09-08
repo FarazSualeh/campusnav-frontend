@@ -126,7 +126,8 @@ function MapPageContent() {
             Return to Floor 3
           </button>
         </div>
-      )}      )
+      )}
+
 
       {/* Mobile Switcher Tab Bar */}
       <div className="md:hidden flex border-b border-slate-200 bg-white sticky top-[57px] z-20">
