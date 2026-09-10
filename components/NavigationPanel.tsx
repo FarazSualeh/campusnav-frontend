@@ -108,6 +108,16 @@ export default function NavigationPanel({
 
 
 
+  const openStartDropdown = () => {
+    setIsStartOpen(true);
+    setIsDestOpen(false);
+  };
+
+  const openDestDropdown = () => {
+    setIsDestOpen(true);
+    setIsStartOpen(false);
+  };
+
   // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -141,6 +151,9 @@ export default function NavigationPanel({
 
     setDestLocation(tempLoc);
     setDestQuery(tempQ);
+
+    setIsStartOpen(false);
+    setIsDestOpen(false);
 
     setRouteInfo(null);
     onRouteCalculated(null);
@@ -227,6 +240,7 @@ export default function NavigationPanel({
       setDestQuery(loc.name);
       onSelectRoom(loc.id);
       setIsDestOpen(false);
+      setIsStartOpen(false);
       setErrorMessage(null);
     }
   };
@@ -275,7 +289,7 @@ export default function NavigationPanel({
         <div className="absolute left-[19px] top-[26px] bottom-[26px] w-0.5 bg-dashed bg-slate-200 pointer-events-none z-0 border-l border-dashed border-slate-300" />
 
         {/* START INPUT */}
-        <div ref={startRef} className="relative z-10">
+        <div ref={startRef} className={`relative ${isStartOpen ? "z-30" : "z-10"}`}>
           <div className="flex items-center justify-between mb-1">
             <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Start Location
@@ -293,7 +307,7 @@ export default function NavigationPanel({
             )}
           </div>
           <div className="relative flex items-center">
-            <div className="absolute left-3 w-4 h-4 rounded-full bg-teal-600 text-white flex items-center justify-center text-[9px] font-bold shadow-sm">
+            <div className="absolute left-3 w-4 h-4 rounded-full bg-teal-600 text-white flex items-center justify-center text-[9px] font-bold shadow-sm pointer-events-none z-10">
               A
             </div>
             <input
@@ -301,10 +315,10 @@ export default function NavigationPanel({
               value={startQuery}
               onChange={(e) => {
                 setStartQuery(e.target.value);
-                setIsStartOpen(true);
+                openStartDropdown();
                 setStartLocation(null);
               }}
-              onFocus={() => setIsStartOpen(true)}
+              onFocus={openStartDropdown}
               placeholder="Search start point (e.g. Staircase, Lab)..."
               className="w-full pl-9 pr-8 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 font-medium text-slate-800 transition-all placeholder:text-slate-400"
             />
@@ -314,7 +328,7 @@ export default function NavigationPanel({
                 onClick={() => {
                   setStartQuery("");
                   setStartLocation(null);
-                  setIsStartOpen(true);
+                  openStartDropdown();
                 }}
                 className="absolute right-2.5 text-slate-400 hover:text-slate-600 p-1 text-xs"
               >
@@ -323,10 +337,9 @@ export default function NavigationPanel({
             )}
           </div>
 
-
           {/* Start Dropdown */}
           {isStartOpen && (
-            <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-white rounded-xl shadow-xl border border-slate-200 z-50 py-1">
+            <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 sm:max-h-60 overflow-y-auto overscroll-contain bg-white rounded-xl shadow-xl border border-slate-200 z-50 py-1">
               {filteredStartList.length === 0 ? (
                 <div className="px-4 py-3 text-xs text-slate-500 text-center">No locations found</div>
               ) : (
@@ -353,7 +366,7 @@ export default function NavigationPanel({
                       </div>
                       <div className="text-[10px] text-slate-500">{loc.subtitle}</div>
                     </div>
-                    <span className="text-[10px] font-medium text-teal-700 bg-teal-100/70 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-medium text-teal-700 bg-teal-100/70 px-2 py-0.5 rounded-full shrink-0 ml-2">
                       {loc.category}
                     </span>
                   </button>
@@ -364,7 +377,7 @@ export default function NavigationPanel({
         </div>
 
         {/* SWAP BUTTON */}
-        <div className="flex justify-end -my-1 pr-3 z-20">
+        <div className="flex justify-end -my-1 pr-3 z-15">
           <button
             type="button"
             onClick={handleSwap}
@@ -376,12 +389,12 @@ export default function NavigationPanel({
         </div>
 
         {/* DESTINATION INPUT */}
-        <div ref={destRef} className="relative z-10">
+        <div ref={destRef} className={`relative ${isDestOpen ? "z-30" : "z-10"}`}>
           <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">
             Destination
           </label>
           <div className="relative flex items-center">
-            <div className="absolute left-3 w-4 h-4 rounded-full bg-orange-600 text-white flex items-center justify-center text-[9px] font-bold shadow-sm">
+            <div className="absolute left-3 w-4 h-4 rounded-full bg-orange-600 text-white flex items-center justify-center text-[9px] font-bold shadow-sm pointer-events-none z-10">
               B
             </div>
             <input
@@ -389,10 +402,10 @@ export default function NavigationPanel({
               value={destQuery}
               onChange={(e) => {
                 setDestQuery(e.target.value);
-                setIsDestOpen(true);
+                openDestDropdown();
                 setDestLocation(null);
               }}
-              onFocus={() => setIsDestOpen(true)}
+              onFocus={openDestDropdown}
               placeholder="Where do you want to go? (e.g. Server Room, AI Lab)..."
               className="w-full pl-9 pr-8 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium text-slate-800 transition-all placeholder:text-slate-400"
             />
@@ -402,7 +415,7 @@ export default function NavigationPanel({
                 onClick={() => {
                   setDestQuery("");
                   setDestLocation(null);
-                  setIsDestOpen(true);
+                  openDestDropdown();
                   onSelectRoom(null);
                 }}
                 className="absolute right-2.5 text-slate-400 hover:text-slate-600 p-1 text-xs"
@@ -414,7 +427,7 @@ export default function NavigationPanel({
 
           {/* Destination Dropdown */}
           {isDestOpen && (
-            <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-white rounded-xl shadow-xl border border-slate-200 z-50 py-1">
+            <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 sm:max-h-60 overflow-y-auto overscroll-contain bg-white rounded-xl shadow-xl border border-slate-200 z-50 py-1">
               {filteredDestList.length === 0 ? (
                 <div className="px-4 py-3 text-xs text-slate-500 text-center">No locations found</div>
               ) : (
@@ -442,7 +455,7 @@ export default function NavigationPanel({
                       </div>
                       <div className="text-[10px] text-slate-500">{loc.subtitle}</div>
                     </div>
-                    <span className="text-[10px] font-medium text-orange-700 bg-orange-100/70 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-medium text-orange-700 bg-orange-100/70 px-2 py-0.5 rounded-full shrink-0 ml-2">
                       {loc.category}
                     </span>
                   </button>

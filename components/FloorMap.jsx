@@ -12,10 +12,15 @@ const CATEGORY_COLORS = {
   Admin: { fill: "#F5EBE6", stroke: "#CCA890", text: "#523B2B", badge: "#8A5838" },
 };
 
+// Special room overrides (fill, stroke, text, badge)
+const ROOM_COLOR_OVERRIDES = {
+  "R-GIRLS": { fill: "#FCE4EC", stroke: "#C2185B", text: "#880E4F", badge: "#C2185B" },
+};
+
 const ROUTE_COLOR = "#C1571F";
 const ROUTE_GLOW_COLOR = "#F4A261";
 const START_COLOR = "#2A9D8F";
-const END_COLOR = "#E76F51";
+const END_COLOR = "#EF4444";
 
 /**
  * Enhanced interactive SVG floor map for 3rd Floor Engineering Building.
@@ -152,7 +157,8 @@ export default function FloorMap({
 
         {/* Room Boxes and Labels */}
         {rooms.map((room) => {
-          const colors = CATEGORY_COLORS[room.category] || CATEGORY_COLORS.Admin;
+          const baseColors = CATEGORY_COLORS[room.category] || CATEGORY_COLORS.Admin;
+          const colors = ROOM_COLOR_OVERRIDES[room.id] || baseColors;
           const isSelected = room.id === selectedRoomId;
           const isStart = room.id === startRoomId;
           const isDest = room.id === destinationRoomId;
@@ -198,19 +204,17 @@ export default function FloorMap({
                 fill={roomFill}
                 stroke={strokeColor}
                 strokeWidth={strokeWidth}
-                rx={4}
+                rx={5}
                 className="transition-all duration-200"
               />
 
               {/* Category indicator pill on top-left of room */}
-              <rect
-                x={room.x + 4}
-                y={room.y + 4}
-                width={6}
-                height={6}
-                rx={3}
+              <circle
+                cx={room.x + 6}
+                cy={room.y + 6}
+                r={2.5}
                 fill={colors.badge}
-                opacity={0.8}
+                opacity={0.85}
               />
 
               {/* Room Label */}
@@ -218,11 +222,11 @@ export default function FloorMap({
                 x={room.x + room.w / 2}
                 y={room.y + room.h / 2}
                 textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize="9"
+                dominantBaseline="central"
+                fontSize="8"
                 fontWeight={isStart || isDest || isSelected ? "700" : "500"}
                 fill={isStart ? "#134E48" : isDest ? "#7C2D12" : colors.text}
-                style={{ pointerEvents: "none", letterSpacing: "-0.01em" }}
+                style={{ pointerEvents: "none", letterSpacing: "-0.015em" }}
               >
                 {wrapLabel(room.label, room.x + room.w / 2)}
               </text>
@@ -242,20 +246,20 @@ export default function FloorMap({
             <circle
               cx={nodeById["N0"].x}
               cy={nodeById["N0"].y}
-              r="14"
+              r="13"
               fill="#FFFFFF"
               stroke={startRoomId === "LOC-STAIRCASE-3" ? START_COLOR : destinationRoomId === "LOC-STAIRCASE-3" ? END_COLOR : "#4A5568"}
               strokeWidth="2.5"
-              filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
+              filter="drop-shadow(0 2px 4px rgba(0,0,0,0.12))"
             />
             {/* Staircase icon lines */}
             <path
-              d={`M ${nodeById["N0"].x - 6} ${nodeById["N0"].y + 4} 
+              d={`M ${nodeById["N0"].x - 5} ${nodeById["N0"].y + 4} 
                  L ${nodeById["N0"].x - 2} ${nodeById["N0"].y + 4} 
                  L ${nodeById["N0"].x - 2} ${nodeById["N0"].y} 
                  L ${nodeById["N0"].x + 2} ${nodeById["N0"].y} 
                  L ${nodeById["N0"].x + 2} ${nodeById["N0"].y - 4} 
-                 L ${nodeById["N0"].x + 6} ${nodeById["N0"].y - 4}`}
+                 L ${nodeById["N0"].x + 5} ${nodeById["N0"].y - 4}`}
               fill="none"
               stroke="#2D3748"
               strokeWidth="1.8"
@@ -264,17 +268,17 @@ export default function FloorMap({
             />
             <rect
               x={nodeById["N0"].x - 44}
-              y={nodeById["N0"].y + 20}
+              y={nodeById["N0"].y + 16}
               width="88"
-              height="18"
+              height="16"
               rx="4"
               fill="#2D3748"
             />
             <text
               x={nodeById["N0"].x}
-              y={nodeById["N0"].y + 32}
+              y={nodeById["N0"].y + 27.5}
               textAnchor="middle"
-              fontSize="9"
+              fontSize="8"
               fontWeight="600"
               fill="#FFFFFF"
             >
@@ -291,7 +295,7 @@ export default function FloorMap({
               <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2s" repeatCount="indefinite" />
             </circle>
             <circle r="7" fill={START_COLOR} stroke="#FFFFFF" strokeWidth="2" />
-            <text y="3" textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="7" fontWeight="bold">
+            <text y="2.5" textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="7" fontWeight="bold">
               A
             </text>
           </g>
@@ -305,15 +309,15 @@ export default function FloorMap({
               <animate attributeName="opacity" values="0.4;0.1;0.4" dur="1.8s" repeatCount="indefinite" />
             </circle>
             <circle r="7" fill={END_COLOR} stroke="#FFFFFF" strokeWidth="2" />
-            <text y="3" textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="7" fontWeight="bold">
+            <text y="2.5" textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="7" fontWeight="bold">
               B
             </text>
           </g>
         )}
 
-        {/* North Arrow and Floor Tag */}
-        <g transform="translate(640, 40)">
-          <circle cx="0" cy="0" r="14" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="1" />
+        {/* North Arrow and Floor Compass */}
+        <g transform="translate(520, 165)">
+          <circle cx="0" cy="0" r="14" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="1" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.06))" />
           <path d="M 0 -8 L 4 4 L 0 2 L -4 4 Z" fill="#C1571F" />
           <text x="0" y="11" textAnchor="middle" fontSize="6.5" fontWeight="bold" fill="#64748B">
             N
@@ -328,20 +332,100 @@ export default function FloorMap({
  * Intelligent room label wrapper: breaks long names evenly across tspan lines.
  */
 function wrapLabel(label, centerX) {
+  if (label === "Software Engineering Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Software</tspan>
+        <tspan x={centerX} dy="11">Eng. Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Artificial Intelligence Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Artificial</tspan>
+        <tspan x={centerX} dy="11">Intelligence Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Electronics & Signal Processing Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Electronics &</tspan>
+        <tspan x={centerX} dy="11">Signal Proc. Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Programing Paradigm Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Programming</tspan>
+        <tspan x={centerX} dy="11">Paradigm Lab</tspan>
+      </>
+    );
+  }
+  if (label === "System Programing Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">System</tspan>
+        <tspan x={centerX} dy="11">Prog. Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Database & Analytics Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Database &</tspan>
+        <tspan x={centerX} dy="11">Analytics Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Cloud Computing Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Cloud</tspan>
+        <tspan x={centerX} dy="11">Computing Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Network & Security Lab") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Network &</tspan>
+        <tspan x={centerX} dy="11">Security Lab</tspan>
+      </>
+    );
+  }
+  if (label === "Admin Lounge/Staff Room") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">Admin Lounge /</tspan>
+        <tspan x={centerX} dy="11">Staff Room</tspan>
+      </>
+    );
+  }
+  if (label === "B-409 Seminar Hall") {
+    return (
+      <>
+        <tspan x={centerX} dy="-5">B-409</tspan>
+        <tspan x={centerX} dy="11">Seminar Hall</tspan>
+      </>
+    );
+  }
+
   const words = label.split(" ");
   if (words.length <= 2) return label;
 
-  // Smart splitting based on length
   const mid = Math.ceil(words.length / 2);
   const line1 = words.slice(0, mid).join(" ");
   const line2 = words.slice(mid).join(" ");
 
   return (
     <>
-      <tspan x={centerX} dy="-6">
+      <tspan x={centerX} dy="-5">
         {line1}
       </tspan>
-      <tspan x={centerX} dy="12">
+      <tspan x={centerX} dy="11">
         {line2}
       </tspan>
     </>

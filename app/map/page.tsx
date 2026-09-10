@@ -13,7 +13,6 @@ const FLOORS = [
   { id: "1", label: "Floor 1", status: "Coming Soon" },
   { id: "2", label: "Floor 2", status: "Coming Soon" },
   { id: "3", label: "Floor 3", status: "Live", active: true },
-  { id: "4", label: "Floor 4", status: "Coming Soon" },
 ];
 
 function MapPageContent() {
@@ -290,7 +289,11 @@ function MapPageContent() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-3.5 h-3.5 rounded border border-[#9BB7CD] bg-[#EAF2F8]" />
-                  <span>Washrooms</span>
+                  <span>Male Washrooms</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3.5 h-3.5 rounded border border-[#9174D] bg-[#be185d]" />
+                  <span>Female Washrooms</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-3.5 h-3.5 rounded border border-[#CCA890] bg-[#F5EBE6]" />

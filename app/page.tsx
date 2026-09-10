@@ -48,8 +48,8 @@ export default function Home() {
 
         <div className="hero-content shell">
           <div className="hero-copy">
-            <p className="eyebrow"><span /> Built for Kalsekar Technical Campus</p>
-            <h1>Navigate your campus.<br /><em>With confidence.</em></h1>
+            <p className="eyebrow"><span /> Explore AIKTC&apos;s Campus</p>
+            <h1>Navigate our campus.<br /><em>With confidence.</em></h1>
             <p className="hero-description">
               CampusNav helps students find classrooms, labs, offices and facilities inside the campus, without the guesswork.
             </p>
