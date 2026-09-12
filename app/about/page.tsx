@@ -32,7 +32,10 @@ export default function AboutPage() {
           <Link href="/map">Live maps</Link>
           <Link href="/about" aria-current="page">About us</Link>
         </div>
-        <Link className="nav-cta" href="/map">Explore campus <Arrow /></Link>
+        <div className="about-nav-actions">
+          <Link className="back-link" href="/">← Back to home</Link>
+          <Link className="nav-cta" href="/map">Explore campus <Arrow /></Link>
+        </div>
         <details className="mobile-menu">
           <summary aria-label="Open navigation menu">☰</summary>
           <div>
