@@ -201,12 +201,15 @@ export default function Home() {
       </section>
 
       <footer className="footer shell">
-        <Logo />
+        <div className="footer-brand" aria-label="CampusNav brand">
+          <Image src="/campusnavlogo.png" alt="" width={42} height={42} />
+          <span>CampusNav</span>
+        </div>
         <div className="footer-campus">
           Anjuman-i-Islam&apos;s<br />Kalsekar Technical Campus
         </div>
         <div className="footer-right">
-          <span>Indoor campus navigation system</span>
+          <span>AIKTC Indoor campus navigation system</span>
           <span>© 2026 CampusNav</span>
         </div>
       </footer>

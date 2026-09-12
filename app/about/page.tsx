@@ -3,11 +3,11 @@ import Link from "next/link";
 
 const creators = [
   {
-    initials: "FS",
+    image: "/farazpp.png",
     name: "Faraz Sualeh",
     role: "BSc IT student",
     text: "Faraz built the maps and search experience — everything you see and interact with when finding your way around campus, from your first search to the final turn.",
-  },
+  }, 
   {
     initials: "BP",
     name: "Burhan Parkar",
@@ -32,10 +32,7 @@ export default function AboutPage() {
           <Link href="/map">Live maps</Link>
           <Link href="/about" aria-current="page">About us</Link>
         </div>
-        <div className="about-nav-actions">
-          <Link className="back-link" href="/">← Back to home</Link>
-          <Link className="nav-cta" href="/map">Explore campus <Arrow /></Link>
-        </div>
+        <Link className="nav-cta" href="/map">Explore campus <Arrow /></Link>
         <details className="mobile-menu">
           <summary aria-label="Open navigation menu">☰</summary>
           <div>
@@ -46,6 +43,10 @@ export default function AboutPage() {
           </div>
         </details>
       </nav>
+
+      <div className="about-back-row shell">
+        <Link className="back-link" href="/">← Back to home</Link>
+      </div>
 
       <section className="about-hero shell">
         <div className="about-hero-copy">
@@ -85,7 +86,7 @@ export default function AboutPage() {
       <section className="about-story section shell">
         <div className="about-section-label">
           <span>01</span>
-          <p className="eyebrow"><span /> Why CampusNav</p>
+          <p className="eyebrow"><span /> Why CampusNav?</p>
         </div>
         <div className="about-story-copy">
           <h2>Because finding a room shouldn&apos;t feel like a <em>detour.</em></h2>
@@ -108,7 +109,17 @@ export default function AboutPage() {
           <div className="creator-grid">
             {creators.map((creator) => (
               <article className="creator-card" key={creator.name}>
-                <div className="creator-initials">{creator.initials}</div>
+                {creator.image ? (
+                  <Image
+                    className="creator-avatar"
+                    src={creator.image}
+                    alt={`${creator.name} profile`}
+                    width={78}
+                    height={78}
+                  />
+                ) : (
+                  <div className="creator-initials">{creator.initials}</div>
+                )}
                 <div className="creator-text">
                   <p className="creator-role">{creator.role}</p>
                   <h3>{creator.name}</h3>
@@ -121,13 +132,12 @@ export default function AboutPage() {
       </section>
 
       <footer className="footer shell">
-        <div className="footer-brand" aria-label="CampusNav brand mark">
-          <span className="brand-badge" />
+        <div className="footer-brand" aria-label="CampusNav brand">
+          <Image src="/campusnavlogo.png" alt="" width={42} height={42} />
           <span>CampusNav</span>
         </div>
         <div className="footer-campus">Anjuman-i-Islam&apos;s<br />Kalsekar Technical Campus</div>
         <div className="footer-right">
-          <span>Indoor campus navigation system</span>
           <span>© 2026 CampusNav</span>
         </div>
       </footer>
