@@ -8,6 +8,7 @@ interface NavigationPanelProps {
   onRouteCalculated: (route: {
     path: string[];
     totalDistance: number;
+    floorTransitions?: { fromNode: string; toNode: string; fromFloor: string; toFloor: string }[];
     startLoc: NavLocation | null;
     destLoc: NavLocation | null;
   } | null) => void;
@@ -64,6 +65,7 @@ export default function NavigationPanel({
     path: string[];
     totalDistance: number;
     estimatedSeconds: number;
+    floorTransitions: { fromNode: string; toNode: string; fromFloor: string; toFloor: string }[];
   } | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState(false);
@@ -180,7 +182,7 @@ export default function NavigationPanel({
 
     try {
       // First attempt Next.js API route /api/route?start=...&end=...
-      let data: { path: string[]; totalDistance: number };
+      let data: { path: string[]; totalDistance: number; floorTransitions?: { fromNode: string; toNode: string; fromFloor: string; toFloor: string }[] };
       try {
         const response = await fetch(`/api/route?start=${encodeURIComponent(startNode)}&end=${encodeURIComponent(endNode)}`);
         if (response.ok) {
@@ -207,11 +209,13 @@ export default function NavigationPanel({
           path: data.path,
           totalDistance: meters,
           estimatedSeconds: seconds,
+          floorTransitions: data.floorTransitions || [],
         });
 
         onRouteCalculated({
           path: data.path,
           totalDistance: meters,
+          floorTransitions: data.floorTransitions || [],
           startLoc: startLocation,
           destLoc: destLocation,
         });
@@ -254,7 +258,7 @@ export default function NavigationPanel({
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse" />
             <h2 className="text-lg font-bold text-slate-900 tracking-tight">Indoor Navigation</h2>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">Engineering Building • Floor 3</p>
+          <p className="text-xs text-slate-500 mt-0.5">Engineering Building • Floors 2 &amp; 3</p>
         </div>
         <span className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 bg-amber-50 text-amber-800 rounded-full border border-amber-200/60">
           KTC Campus
@@ -579,6 +583,17 @@ export default function NavigationPanel({
               <span>{shareCopied ? "Link Copied!" : "Share Route"}</span>
             </button>
           </div>
+
+          {routeInfo.floorTransitions.length > 0 && (
+            <div className="border-t border-orange-200/40 pt-2 text-xs text-slate-700">
+              {routeInfo.floorTransitions.map((transition) => (
+                <div key={`${transition.fromNode}-${transition.toNode}`} className="flex items-center gap-2 font-semibold">
+                  <span aria-hidden="true">⇅</span>
+                  <span>Take the stairs to Floor {transition.toFloor}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

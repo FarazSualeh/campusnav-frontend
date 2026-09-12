@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const features = [
   ["01", "Indoor Navigation", "Turn-by-turn guidance that understands the spaces between buildings.", "↗"],
@@ -10,8 +11,7 @@ const features = [
 function Logo() {
   return (
     <Link className="logo" href="/" aria-label="CampusNav home">
-      <span className="logo-mark"><i /><i /><i /></span>
-      <span>Campus<span className="logo-accent">Nav</span></span>
+      <Image src="/campusnavlogo.png" alt="CampusNav" width={108} height={66} />
     </Link>
   );
 }
@@ -30,7 +30,8 @@ export default function Home() {
             <a href="#how-it-works">How it works</a>
             <a href="#features">Features</a>
             <a href="#departments">Departments</a>
-            <Link href="/map" className="text-orange-600 font-bold">Live 3rd Floor Map</Link>
+            <Link href="/about">About us</Link>
+            <Link href="/map" className="text-orange-600 font-bold">Live Floor 2 &amp; 3 Maps</Link>
           </div>
           <Link className="nav-cta" href="/map">
             Explore campus <Arrow />
@@ -42,6 +43,7 @@ export default function Home() {
               <a href="#how-it-works">How it works</a>
               <a href="#features">Features</a>
               <a href="#departments">Departments</a>
+              <Link href="/about">About us</Link>
             </div>
           </details>
         </nav>
@@ -55,14 +57,14 @@ export default function Home() {
             </p>
             <div className="hero-actions">
               <Link className="button button-primary" href="/map">
-                Explore 3rd Floor Map <Arrow />
+                Explore Floor 2 &amp; 3 Maps <Arrow />
               </Link>
               <a className="text-link" href="#how-it-works">
                 See how it works <span>↓</span>
               </a>
             </div>
             <div className="hero-note">
-              <span className="status-dot" /> Live: Engineering Building (3rd Floor)
+              <span className="status-dot" /> Live: Engineering Building (Floors 2 &amp; 3)
             </div>
           </div>
 
@@ -74,7 +76,7 @@ export default function Home() {
             <div className="map-grid" />
             <div className="map-building building-a">
               <b>A</b>
-              <span>Engineering (3rd Floor Live)</span>
+              <span>Engineering (Floors 2 &amp; 3 Live)</span>
             </div>
             <div className="map-building building-b">
               <b>B</b>
@@ -116,7 +118,7 @@ export default function Home() {
         </div>
         <div className="process-grid">
           {[
-            ["01", "Search", "Search for any classroom, lab, washroom or lounge on Floor 3."],
+            ["01", "Search", "Search for any classroom, lab, washroom or lounge on Floors 2 and 3."],
             ["02", "Select destination", "Choose from real-time filtered locations or tap any room."],
             ["03", "Navigate", "Follow the optimal corridor path highlighted directly on the map."],
           ].map(([number, title, text], index) => (
@@ -166,14 +168,14 @@ export default function Home() {
             Whether you are heading to a morning lecture or finding a new lab, CampusNav keeps every department connected.
           </p>
           <Link className="text-link" href="/map">
-            Explore 3rd floor navigation <Arrow />
+            Explore Floor 2 &amp; 3 navigation <Arrow />
           </Link>
         </div>
         <div className="department-list">
           <div>
             <span>01</span>
             <b>Engineering</b>
-            <small>Floor 3 Navigation Active</small>
+            <small>Floors 2 &amp; 3 Navigation Active</small>
           </div>
           <div>
             <span>02</span>

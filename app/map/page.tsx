@@ -4,6 +4,7 @@ import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import FloorMap from "@/components/FloorMap";
+import Floor2Map from "@/components/Floor2Map";
 import NavigationPanel from "@/components/NavigationPanel";
 import QRCodeModal from "@/components/QRCodeModal";
 import { NavLocation, findLocation, findLocationByCodeOrId } from "@/lib/locations";
@@ -11,7 +12,7 @@ import { NavLocation, findLocation, findLocationByCodeOrId } from "@/lib/locatio
 const FLOORS = [
   { id: "G", label: "Ground", status: "Coming Soon" },
   { id: "1", label: "Floor 1", status: "Coming Soon" },
-  { id: "2", label: "Floor 2", status: "Coming Soon" },
+  { id: "2", label: "Floor 2", status: "Live", active: true },
   { id: "3", label: "Floor 3", status: "Live", active: true },
 ];
 
@@ -21,6 +22,7 @@ function MapPageContent() {
   const [routeData, setRouteData] = useState<{
     path: string[];
     totalDistance: number;
+    floorTransitions?: { fromNode: string; toNode: string; fromFloor: string; toFloor: string }[];
     startLoc: NavLocation | null;
     destLoc: NavLocation | null;
   } | null>(null);
@@ -36,7 +38,7 @@ function MapPageContent() {
   const [selectedFloor, setSelectedFloor] = useState<string | null>(null);
   const activeFloor = selectedFloor || (floorParam && FLOORS.some((f) => f.id === floorParam) ? floorParam : "3");
   const floorNotice =
-    activeFloor !== "3"
+    activeFloor !== "3" && activeFloor !== "2"
       ? `Floor ${activeFloor} blueprint is coming soon! Routing via Staircase (N0) for inter-floor transition.`
       : null;
 
@@ -79,7 +81,7 @@ function MapPageContent() {
             <span className="font-semibold text-slate-800">Engineering Building</span>
             <span>•</span>
             <span className="bg-orange-100 text-orange-800 font-bold px-2 py-0.5 rounded-md text-[11px]">
-              Floor {activeFloor} {activeFloor === "3" ? "(Live)" : "(Transition Mode)"}
+              Floor {activeFloor} {activeFloor === "3" || activeFloor === "2" ? "(Live)" : "(Transition Mode)"}
             </span>
           </div>
         </div>
@@ -221,7 +223,7 @@ function MapPageContent() {
             <ul className="list-disc list-inside space-y-1 text-slate-600 text-[11.5px] leading-relaxed">
               <li>Click directly on any room in the floor plan to set it as destination.</li>
               <li>Use the <strong>&quot;Get QR Code&quot;</strong> button to generate scannable location links.</li>
-              <li>Staircase (N0) connects the 3rd floor corridor to other building floors.</li>
+              <li>Main staircase (N0) and back staircase (N30) connect the 3rd floor corridor to other building floors.</li>
             </ul>
           </div>
         </section>
@@ -262,15 +264,27 @@ function MapPageContent() {
 
             {/* SVG Floor Map Component */}
             <div className="w-full max-w-3xl overflow-x-auto">
-              <FloorMap
-                routeNodeIds={routeData?.path || []}
-                selectedRoomId={selectedRoomId}
-                startRoomId={routeData?.startLoc?.id || null}
-                destinationRoomId={routeData?.destLoc?.id || null}
-                startNodeId={routeData?.startLoc?.nodeId || null}
-                destinationNodeId={routeData?.destLoc?.nodeId || null}
-                onRoomClick={handleRoomClick}
-              />
+              {activeFloor === "2" ? (
+                <Floor2Map
+                  routeNodeIds={routeData?.path || []}
+                  selectedRoomId={selectedRoomId}
+                  startRoomId={routeData?.startLoc?.id || null}
+                  destinationRoomId={routeData?.destLoc?.id || null}
+                  startNodeId={routeData?.startLoc?.nodeId || null}
+                  destinationNodeId={routeData?.destLoc?.nodeId || null}
+                  onRoomClick={handleRoomClick}
+                />
+              ) : (
+                <FloorMap
+                  routeNodeIds={routeData?.path || []}
+                  selectedRoomId={selectedRoomId}
+                  startRoomId={routeData?.startLoc?.id || null}
+                  destinationRoomId={routeData?.destLoc?.id || null}
+                  startNodeId={routeData?.startLoc?.nodeId || null}
+                  destinationNodeId={routeData?.destLoc?.nodeId || null}
+                  onRoomClick={handleRoomClick}
+                />
+              )}
             </div>
 
             {/* Color Legend */}

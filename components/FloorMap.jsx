@@ -21,6 +21,10 @@ const ROUTE_COLOR = "#C1571F";
 const ROUTE_GLOW_COLOR = "#F4A261";
 const START_COLOR = "#2A9D8F";
 const END_COLOR = "#EF4444";
+const STAIRCASE_NODE_IDS = {
+  "LOC-STAIRCASE-3": "N0",
+  "LOC-BACK-STAIRCASE-3": "N30",
+};
 
 /**
  * Enhanced interactive SVG floor map for 3rd Floor Engineering Building.
@@ -57,8 +61,8 @@ export default function FloorMap({
   const routeSet = new Set(routeNodeIds);
 
   // Determine effective start and destination node coordinates for markers
-  const effectiveStartNodeId = startNodeId || (startRoomId ? (startRoomId.startsWith("LOC-STAIRCASE") ? "N0" : roomToNode[startRoomId]) : null);
-  const effectiveEndNodeId = destinationNodeId || (destinationRoomId ? (destinationRoomId.startsWith("LOC-STAIRCASE") ? "N0" : roomToNode[destinationRoomId]) : null);
+  const effectiveStartNodeId = startNodeId || (startRoomId ? (STAIRCASE_NODE_IDS[startRoomId] || roomToNode[startRoomId]) : null);
+  const effectiveEndNodeId = destinationNodeId || (destinationRoomId ? (STAIRCASE_NODE_IDS[destinationRoomId] || roomToNode[destinationRoomId]) : null);
 
   const startCoord = effectiveStartNodeId ? nodeById[effectiveStartNodeId] : null;
   const endCoord = effectiveEndNodeId ? nodeById[effectiveEndNodeId] : null;
@@ -233,6 +237,41 @@ export default function FloorMap({
             </g>
           );
         })}
+
+        {/* Back staircase bay — positioned between B-409 and the Boys Toilet */}
+        {nodeById["N30"] && (
+          <g
+            onClick={() => onRoomClick && onRoomClick("LOC-BACK-STAIRCASE-3")}
+            style={{ cursor: "pointer" }}
+            onMouseEnter={() => setHoveredRoom("LOC-BACK-STAIRCASE-3")}
+            onMouseLeave={() => setHoveredRoom(null)}
+          >
+            <rect
+              x="303"
+              y="18"
+              width="34"
+              height="58"
+              rx="5"
+              fill="#FFFFFF"
+              stroke={startRoomId === "LOC-BACK-STAIRCASE-3" ? START_COLOR : destinationRoomId === "LOC-BACK-STAIRCASE-3" ? END_COLOR : "#4A5568"}
+              strokeWidth="2"
+            />
+            <path
+              d="M 310 65 H 316 V 58 H 322 V 51 H 328 V 44"
+              fill="none"
+              stroke="#2D3748"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <text x="320" y="31" textAnchor="middle" fontSize="6.5" fontWeight="700" fill="#2D3748">
+              Back
+            </text>
+            <text x="320" y="39" textAnchor="middle" fontSize="6.5" fontWeight="700" fill="#2D3748">
+              Staircase
+            </text>
+          </g>
+        )}
 
         {/* Staircase / Floor Entry Marker */}
         {nodeById["N0"] && (
