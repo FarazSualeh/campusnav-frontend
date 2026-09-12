@@ -45,16 +45,37 @@ export default function AboutPage() {
       </nav>
 
       <section className="about-hero shell">
-        <div>
+        <div className="about-hero-copy">
           <p className="eyebrow"><span /> The people behind the map</p>
           <h1>Built here.<br /><em>Made for here.</em></h1>
           <p className="about-lead">
             CampusNav is an indoor navigation platform created by two BSc IT students at Anjuman-i-Islam&apos;s Kalsekar Technical Campus.
           </p>
         </div>
-        <div className="about-logo-lockup">
-          <Image src="/campusnavlogo.png" alt="CampusNav official logo" width={360} height={360} priority />
-          <span>Find your way</span>
+        <div className="about-visual" aria-label="Campus route illustration">
+          <div className="about-visual-header">
+            <span>Engineering block</span>
+            <span className="status-pill">Live</span>
+          </div>
+          <div className="route-graphic">
+            <div className="campus-block block-a">
+              <b>A</b>
+              <small>Labs</small>
+            </div>
+            <div className="campus-block block-b">
+              <b>B</b>
+              <small>Dept.</small>
+            </div>
+            <div className="campus-block block-c">
+              <b>C</b>
+              <small>Study</small>
+            </div>
+            <span className="route-line line-one" />
+            <span className="route-line line-two" />
+            <span className="route-line line-three" />
+            <span className="route-pin pin-start">Start</span>
+            <span className="route-pin pin-end">You are here</span>
+          </div>
         </div>
       </section>
 
@@ -71,7 +92,7 @@ export default function AboutPage() {
           <p>
             Starting with the Engineering Building&apos;s second and third floors, the platform brings the campus map into one focused, student-friendly experience.
           </p>
-          <Link className="text-link" href="/map">Open the interactive map <Arrow /></Link>
+          <Link className="text-link cta-link" href="/map">Open the interactive map <Arrow /></Link>
         </div>
       </section>
 
@@ -85,7 +106,7 @@ export default function AboutPage() {
             {creators.map((creator) => (
               <article className="creator-card" key={creator.name}>
                 <div className="creator-initials">{creator.initials}</div>
-                <div>
+                <div className="creator-text">
                   <p className="creator-role">{creator.role}</p>
                   <h3>{creator.name}</h3>
                   <p>{creator.text}</p>
@@ -97,9 +118,10 @@ export default function AboutPage() {
       </section>
 
       <footer className="footer shell">
-        <Link className="logo" href="/" aria-label="CampusNav home">
-          <Image src="/campusnavlogo.png" alt="CampusNav" width={108} height={66} />
-        </Link>
+        <div className="footer-brand" aria-label="CampusNav brand mark">
+          <span className="brand-badge" />
+          <span>CampusNav</span>
+        </div>
         <div className="footer-campus">Anjuman-i-Islam&apos;s<br />Kalsekar Technical Campus</div>
         <div className="footer-right">
           <span>Indoor campus navigation system</span>
