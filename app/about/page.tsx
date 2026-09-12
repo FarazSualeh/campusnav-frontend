@@ -6,13 +6,13 @@ const creators = [
     initials: "FS",
     name: "Faraz Sualeh",
     role: "BSc IT student",
-    text: "Faraz helped shape CampusNav's product direction and build a clearer way for students to move through campus.",
+    text: "Faraz built the maps and search experience — everything you see and interact with when finding your way around campus, from your first search to the final turn.",
   },
   {
     initials: "BP",
     name: "Burhan Parkar",
     role: "BSc IT student",
-    text: "Burhan helped turn the campus layout into an accessible, practical navigation experience for everyday use.",
+    text: "Burhan built the system that figures out the fastest route for you, working behind the scenes so every path you're shown actually makes sense.",
   },
 ];
 
