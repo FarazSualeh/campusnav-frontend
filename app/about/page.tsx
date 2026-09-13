@@ -37,12 +37,14 @@ export const metadata: Metadata = {
 const creators = [
   {
     image: "/farazs.jpg",
+    alt:"faraz's pic",
     name: "Faraz Sualeh",
     role: "Frontend Developer, UI/UX designer, and Navigation System Handler",
-    text: "Faraz built the Maps, search, and navigation experience, from finding locations and selecting destinations to calculating the shortest route and guiding users with turn-by-turn directions.",
+    text: "Faraz built the Maps, search, and navigation experience, from finding locations and selecting destinations to calculating the shortest route and guiding users with precise directions.",
   },
   {
     image: "/burhanp.jpg",
+    alt:"burhan's pic",
     name: "Burhan Parkar",
     role: "Backend Developer, Database Manager and System Administrator",
     text: "Burhan built the backend that powers CampusNav, managing the APIs, data flow, and database structure that keep locations and navigation information organized and accessible.",

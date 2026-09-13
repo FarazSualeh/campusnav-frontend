@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Kalsekar Technical Campus navigation",
     "classroom finder",
     "engineering building map",
-    "turn by turn indoor routing",
+    "indoor routing",
     "Dijkstra navigation",
   ],
   alternates: {
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Interactive Campus Map & Live Indoor Navigation | CampusNav",
     description:
-      "Live turn-by-turn indoor routing for classrooms, labs, and facilities at AIKTC.",
+      "Live indoor routing for classrooms, labs, and facilities at AIKTC.",
     images: ["/campusnavlogo.png"],
   },
 };
