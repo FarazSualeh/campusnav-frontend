@@ -29,7 +29,6 @@ function MapPageContent() {
 
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [selectedRoomInfo, setSelectedRoomInfo] = useState<NavLocation | null>(null);
-  const [mobileTab, setMobileTab] = useState<"map" | "search">("map");
 
   const startParam = searchParams.get("start") || searchParams.get("from");
   const destParam = searchParams.get("to") || searchParams.get("dest") || searchParams.get("destination");
@@ -142,52 +141,15 @@ function MapPageContent() {
         </div>
       )}
 
-
-      {/* Mobile Switcher Tab Bar */}
-      <div className="md:hidden flex border-b border-slate-200 bg-white sticky top-[57px] z-20">
-        <button
-          type="button"
-          onClick={() => setMobileTab("map")}
-          className={`flex-1 py-2.5 text-xs font-bold text-center border-b-2 transition-colors ${
-            mobileTab === "map"
-              ? "border-orange-600 text-orange-600 bg-orange-50/40"
-              : "border-transparent text-slate-500 hover:text-slate-800"
-          }`}
-        >
-          🗺️ View Map
-        </button>
-        <button
-          type="button"
-          onClick={() => setMobileTab("search")}
-          className={`flex-1 py-2.5 text-xs font-bold text-center border-b-2 transition-colors relative ${
-            mobileTab === "search"
-              ? "border-orange-600 text-orange-600 bg-orange-50/40"
-              : "border-transparent text-slate-500 hover:text-slate-800"
-          }`}
-        >
-          🔍 Directions & Search
-          {routeData && (
-            <span className="absolute top-2 right-6 w-2 h-2 bg-orange-600 rounded-full" />
-          )}
-        </button>
-      </div>
-
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Left Side: Navigation Search Panel */}
-        <section
-          className={`lg:col-span-4 flex flex-col gap-4 ${
-            mobileTab === "search" ? "block" : "hidden lg:flex"
-          }`}
-        >
+        {/* Left/Top Side: Navigation Search Panel */}
+        <section className="lg:col-span-4 flex flex-col gap-4 w-full">
           <NavigationPanel
             initialStart={initialStart}
             initialDest={initialDest}
             onRouteCalculated={(data) => {
               setRouteData(data);
-              if (data && window.innerWidth < 1024) {
-                setMobileTab("map");
-              }
             }}
             selectedRoomId={selectedRoomId}
             onSelectRoom={(roomId) => {
@@ -241,12 +203,8 @@ function MapPageContent() {
           </div>
         </section>
 
-        {/* Right Side: Floor Map View */}
-        <section
-          className={`lg:col-span-8 flex flex-col gap-3 ${
-            mobileTab === "map" ? "block" : "hidden lg:flex"
-          }`}
-        >
+        {/* Right/Bottom Side: Floor Map View */}
+        <section className="lg:col-span-8 flex flex-col gap-3 w-full">
           {/* Map Container Card */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-5 shadow-sm relative flex flex-col items-center">
             {/* Map Top Bar */}
@@ -263,16 +221,6 @@ function MapPageContent() {
                   </span>
                 )}
               </div>
-
-              {/* Quick switch to search button on mobile map view */}
-              <button
-                type="button"
-                onClick={() => setMobileTab("search")}
-                className="lg:hidden text-xs bg-slate-900 text-white font-semibold px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5"
-              >
-                <span>🔍</span>
-                <span>Change Route</span>
-              </button>
             </div>
 
             {/* SVG Floor Map Component */}

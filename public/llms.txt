@@ -1,0 +1,22 @@
+# CampusNav
+> Indoor Campus Navigation System for Anjuman-i-Islam's Kalsekar Technical Campus (AIKTC), New Panvel.
+
+CampusNav provides web-based indoor navigation, classroom and laboratory lookup, and Dijkstra shortest-path routing across multi-floor campus buildings.
+
+## Core Features
+- **Interactive Floor Maps**: SVG floor plans for Engineering Building Floors 2 and 3.
+- **Shortest Path Routing**: Dijkstra algorithm calculation across corridor waypoint nodes.
+- **Multi-Floor Transitions**: Automatic staircase transition guidance between floors.
+- **Smart Search**: Filterable lookup for classrooms, computer labs, staff rooms, washrooms, and lounges.
+- **Location QR Codes**: Scannable QR links to share starting points or destinations with others.
+
+## Pages & Links
+- [Home](https://campusnav.vercel.app/): Overview, campus departments, and FAQ.
+- [Interactive Map](https://campusnav.vercel.app/map): Live floor navigation and room finder.
+- [About Us](https://campusnav.vercel.app/about): About the creators, tech stack, and background.
+
+## Technology Stack
+- Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS
+- Dijkstra's Algorithm for Shortest Path Routing
+- Backend: Python FastAPI
+- Database: PostgreSQL via Supabase
