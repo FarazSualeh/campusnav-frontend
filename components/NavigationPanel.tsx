@@ -59,6 +59,8 @@ export default function NavigationPanel({
   const [destLocation, setDestLocation] = useState<NavLocation | null>(initialDest || null);
   const [isDestOpen, setIsDestOpen] = useState(false);
 
+  const [activeInput, setActiveInput] = useState<"start" | "dest">("dest");
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [routeInfo, setRouteInfo] = useState<{
@@ -100,9 +102,17 @@ export default function NavigationPanel({
     if (selectedRoomId) {
       const loc = findLocation(selectedRoomId);
       if (loc) {
-        setDestLocation(loc);
-        setDestQuery(loc.name);
-        setIsDestOpen(false);
+        if (activeInput === "start") {
+          setStartLocation(loc);
+          setStartQuery(loc.name);
+          setIsStartOpen(false);
+          // Optional: switch active input to dest after selecting start so next click is dest
+          setActiveInput("dest");
+        } else {
+          setDestLocation(loc);
+          setDestQuery(loc.name);
+          setIsDestOpen(false);
+        }
         setErrorMessage(null);
       }
     }
@@ -113,11 +123,13 @@ export default function NavigationPanel({
   const openStartDropdown = () => {
     setIsStartOpen(true);
     setIsDestOpen(false);
+    setActiveInput("start");
   };
 
   const openDestDropdown = () => {
     setIsDestOpen(true);
     setIsStartOpen(false);
+    setActiveInput("dest");
   };
 
   // Close dropdowns on outside click

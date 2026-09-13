@@ -1,13 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const features = [
-  ["01", "Indoor Navigation", "Turn-by-turn guidance that understands the spaces between buildings.", "↗"],
-  ["02", "Smart Search", "Find a room, faculty office or facility in seconds with natural search.", "⌕"],
-  ["03", "Multi-Floor Support", "Move confidently across floors with clear lifts, stairs and transitions.", "⇅"],
-  ["04", "Campus Map", "See your destination in context with a live, easy-to-read campus view.", "▦"],
-];
-
 function Logo() {
   return (
     <Link className="logo" href="/" aria-label="CampusNav home">
@@ -20,9 +13,49 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+const faqs = [
+  {
+    question: "What is CampusNav?",
+    answer:
+      "CampusNav is an indoor campus navigation platform designed for Anjuman-i-Islam's Kalsekar Technical Campus (AIKTC) in New Panvel. It helps students, staff, and visitors locate classrooms, computer labs, staff rooms, and facilities with precise navigation.",
+  },
+  {
+    question: "Which buildings and floors are currently supported?",
+    answer:
+      "Currently, Floors 2 and 3 of the Engineering Building are fully mapped and live with interactive Dijkstra routing. Additional floors (Ground and Floor 1) and other campus blocks are coming soon.",
+  },
+  {
+    question: "How does CampusNav calculate the shortest route?",
+    answer:
+      "CampusNav models campus corridors, doorways, and stairwells as a weighted navigation graph. Using Dijkstra's shortest path algorithm, it calculates the most direct walkable route between your starting location and destination.",
+  },
+  {
+    question: "Do I need to download an application to use CampusNav?",
+    answer:
+      "No app installation is needed. CampusNav runs directly in any modern mobile or desktop web browser. You can also share QR codes to your friend to get directions to your destination.",
+  },
+];
+
 export default function Home() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer,
+      },
+    })),
+  };
+
   return (
     <main id="top">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <section className="hero">
         <nav className="nav shell" aria-label="Main navigation">
           <Logo />
@@ -30,6 +63,7 @@ export default function Home() {
             <a href="#how-it-works">How it works</a>
             <a href="#features">Features</a>
             <a href="#departments">Departments</a>
+            <a href="#faq">FAQ</a>
             <Link href="/about">About us</Link>
             <Link href="/map" className="text-orange-600 font-bold">Live Floor 2 &amp; 3 Maps</Link>
           </div>
@@ -43,6 +77,7 @@ export default function Home() {
               <a href="#how-it-works">How it works</a>
               <a href="#features">Features</a>
               <a href="#departments">Departments</a>
+              <a href="#faq">FAQ</a>
               <Link href="/about">About us</Link>
             </div>
           </details>
@@ -135,57 +170,51 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="features-section" id="features">
-        <div className="shell">
-          <div className="section-heading feature-heading">
-            <p className="eyebrow"><span /> Everything within reach</p>
-            <h2>A better way to<br /><em>find your way.</em></h2>
-            <p>Built around the way students actually move through campus.</p>
+      <section className="departments-section" id="departments">
+        <div className="departments section shell">
+          <div className="department-copy">
+            <p className="eyebrow"><span /> One campus, many paths</p>
+            <h2>Made for the <em>whole campus.</em></h2>
+            <p>
+              Whether you are heading to a morning lecture or finding a new lab, CampusNav keeps every department connected.
+            </p>
+            <Link className="text-link" href="/map">
+              Explore Floor 2 &amp; 3 navigation <Arrow />
+            </Link>
           </div>
-          <div className="feature-grid">
-            {features.map(([number, title, text, icon]) => (
-              <article className="feature-card" key={number}>
-                <div className="feature-card-top">
-                  <span>{number}</span>
-                  <strong>{icon}</strong>
-                </div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-                <Link href="/map" aria-label={`Learn more about ${title}`}>
-                  <Arrow />
-                </Link>
-              </article>
-            ))}
+          <div className="department-list">
+            <div>
+              <span>01</span>
+              <b>Engineering</b>
+              <small>Floors 2 &amp; 3 Navigation Active</small>
+            </div>
+            <div>
+              <span>02</span>
+              <b>Pharmacy</b>
+              <small>Care through science</small>
+            </div>
+            <div>
+              <span>03</span>
+              <b>Architecture</b>
+              <small>Designing tomorrow</small>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="departments section shell" id="departments">
-        <div className="department-copy">
-          <p className="eyebrow"><span /> One campus, many paths</p>
-          <h2>Made for the <em>whole campus.</em></h2>
-          <p>
-            Whether you are heading to a morning lecture or finding a new lab, CampusNav keeps every department connected.
-          </p>
-          <Link className="text-link" href="/map">
-            Explore Floor 2 &amp; 3 navigation <Arrow />
-          </Link>
-        </div>
-        <div className="department-list">
-          <div>
-            <span>01</span>
-            <b>Engineering</b>
-            <small>Floors 2 &amp; 3 Navigation Active</small>
+      <section className="faq-section" id="faq">
+        <div className="shell">
+          <div className="section-heading faq-heading">
+            <p className="eyebrow"><span /> Questions &amp; Answers</p>
+            <h2>Frequently asked <em>questions.</em></h2>
           </div>
-          <div>
-            <span>02</span>
-            <b>Pharmacy</b>
-            <small>Care through science</small>
-          </div>
-          <div>
-            <span>03</span>
-            <b>Architecture</b>
-            <small>Designing tomorrow</small>
+          <div className="faq-grid">
+            {faqs.map((faq) => (
+              <article className="faq-card" key={faq.question}>
+                <h3>{faq.question}</h3>
+                <p>{faq.answer}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>

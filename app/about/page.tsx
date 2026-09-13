@@ -1,5 +1,38 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About CampusNav | Team, Tech Stack & Story",
+  description:
+    "Learn about CampusNav — an indoor campus navigation platform created by Faraz Sualeh and Burhan Parkar at Anjuman-i-Islam's Kalsekar Technical Campus (AIKTC).",
+  keywords: [
+    "About CampusNav",
+    "Faraz Sualeh",
+    "Burhan Parkar",
+    "AIKTC BSc IT project",
+    "indoor navigation system developers",
+    "Kalsekar Technical Campus student project",
+  ],
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About CampusNav | Team, Tech Stack & Story",
+    description:
+      "Created by Faraz Sualeh & Burhan Parkar for AIKTC students, faculty, and visitors.",
+    url: "/about",
+    type: "profile",
+    images: [
+      {
+        url: "/campusnavlogo.png",
+        width: 1200,
+        height: 630,
+        alt: "CampusNav Creators",
+      },
+    ],
+  },
+};
 
 const creators = [
   {
@@ -21,8 +54,31 @@ function Arrow() {
 }
 
 export default function AboutPage() {
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "SoftwareApplication",
+      "name": "CampusNav",
+      "applicationCategory": "NavigationApplication",
+      "operatingSystem": "Web",
+      "description":
+        "Indoor campus navigation system for Anjuman-i-Islam's Kalsekar Technical Campus.",
+      "author": creators.map((c) => ({
+        "@type": "Person",
+        "name": c.name,
+        "jobTitle": c.role,
+        "description": c.text,
+      })),
+    },
+  };
+
   return (
     <main className="about-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
       <nav className="nav shell about-nav" aria-label="Main navigation">
         <Link className="logo" href="/" aria-label="CampusNav home">
           <Image src="/campusnavlogo.png" alt="CampusNav" width={108} height={66} />
