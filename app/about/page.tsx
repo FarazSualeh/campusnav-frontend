@@ -9,7 +9,7 @@ const creators = [
     text: "Faraz built the maps and search experience — everything you see and interact with when finding your way around campus, from your first search to the final turn.",
   }, 
   {
-    initials: "BP",
+    image: "/burhanp.jpg",
     name: "Burhan Parkar",
     role: "BSc IT student",
     text: "Burhan built the system that figures out the fastest route for you, working behind the scenes so every path you're shown actually makes sense.",
@@ -118,7 +118,7 @@ export default function AboutPage() {
                     height={78}
                   />
                 ) : (
-                  <div className="creator-initials">{creator.initials}</div>
+                  <div className="creator-initials">{creator.image}</div>
                 )}
                 <div className="creator-text">
                   <p className="creator-role">{creator.role}</p>

@@ -1,9 +1,22 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# CampusNav Agent Instructions
 
-# This is NOT the Next.js you know
+CampusNav is an Indoor Campus Navigation System for Kalsekar Technical Campus.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+### Stack
+- Next.js + React + Tailwind CSS
+- Python FastAPI backend
+- PostgreSQL via Supabase
+- Dijkstra's Algorithm
+- Docker + GitHub Actions
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+### Guidelines
+- Preserve existing functionality.
+- Do not change Dijkstra logic, node IDs or map connections unless requested.
+- Keep navigation data separate from UI.
+- Make focused changes.
+- Do not modify unrelated files.
+- Keep the UI responsive.
+- Do not invent real campus data.
+- Store secrets in environment variables.
+- Run `npm run build` after significant frontend changes.
+- Never commit or push automatically.
