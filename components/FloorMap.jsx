@@ -321,7 +321,7 @@ export default function FloorMap({
               fontWeight="600"
               fill="#FFFFFF"
             >
-              Staircase (Entrance)
+              Front Staircase
             </text>
           </g>
         )}

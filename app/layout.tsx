@@ -60,7 +60,7 @@ export const metadata: Metadata = {
       "Find classrooms, labs, faculty rooms, and navigate across floors at Anjuman-i-Islam's Kalsekar Technical Campus.",
     images: [
       {
-        url: "/campusnavlogo.png",
+        url: "/cnlogo.png",
         width: 1200,
         height: 630,
         alt: "CampusNav - Indoor Campus Navigation System",
@@ -72,7 +72,16 @@ export const metadata: Metadata = {
     title: "CampusNav | Indoor Campus Navigation for AIKTC, Panvel",
     description:
       "Indoor routing and room search for Kalsekar Technical Campus.",
-    images: ["/campusnavlogo.png"],
+    images: ["/ cnlogo.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/cnlogo.png", type: "image/png" },
+    ],
+    shortcut: ["/cnlogo.png"],
+    apple: [
+      { url: "/cnlogo.png", sizes: "210x210", type: "image/png" },
+    ],
   },
   robots: {
     index: true,

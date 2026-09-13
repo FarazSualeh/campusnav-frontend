@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import FloorMap from "@/components/FloorMap";
 import Floor2Map from "@/components/Floor2Map";
@@ -68,9 +69,7 @@ function MapPageContent() {
             href="/"
             className="flex items-center gap-2.5 text-slate-900 font-extrabold text-lg tracking-tight hover:opacity-80 transition-opacity"
           >
-            <span className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-mono font-bold">
-              CN
-            </span>
+            <Image src="/cnlogo.png" alt="CampusNav Logo" width={28} height={28} className="w-7 h-7 rounded-lg" />
             <span>
               Campus<span className="text-orange-600">Nav</span>
             </span>
@@ -160,6 +159,9 @@ function MapPageContent() {
               setQrLocation(loc);
               setIsQrOpen(true);
             }}
+            onFloorChange={(floorId) => {
+              setSelectedFloor(floorId);
+            }}
           />
 
           {/* Room Details Preview Card */}
@@ -189,8 +191,8 @@ function MapPageContent() {
             </div>
           )}
 
-          {/* Interactive Navigation Tips */}
-          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 text-xs text-slate-600 flex flex-col gap-2">
+          {/* Interactive Navigation Tips (Desktop view) */}
+          <div className="hidden lg:flex bg-slate-50 rounded-2xl p-4 border border-slate-200/60 text-xs text-slate-600 flex-col gap-2">
             <div className="font-bold text-slate-800 flex items-center gap-1.5">
               <span>💡</span>
               <span>Interactive Navigation Tips</span>
@@ -198,7 +200,7 @@ function MapPageContent() {
             <ul className="list-disc list-inside space-y-1 text-slate-600 text-[11.5px] leading-relaxed">
               <li>Click directly on any room in the floor plan to set it as destination.</li>
               <li>Use the <strong>&quot;Get QR Code&quot;</strong> button to generate scannable location links.</li>
-              <li>Main staircase (N0) and back staircase (N30) connect the 3rd floor corridor to other building floors.</li>
+              <li>Front staircase (N0) and back staircase (N30) connect corridors across floors.</li>
             </ul>
           </div>
         </section>
@@ -287,6 +289,19 @@ function MapPageContent() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Interactive Navigation Tips (Mobile view, below the map) */}
+          <div className="flex lg:hidden bg-slate-50 rounded-2xl p-4 border border-slate-200/60 text-xs text-slate-600 flex-col gap-2">
+            <div className="font-bold text-slate-800 flex items-center gap-1.5">
+              <span>💡</span>
+              <span>Interactive Navigation Tips</span>
+            </div>
+            <ul className="list-disc list-inside space-y-1 text-slate-600 text-[11.5px] leading-relaxed">
+              <li>Click directly on any room in the floor plan to set it as destination.</li>
+              <li>Use the <strong>&quot;Get QR Code&quot;</strong> button to generate scannable location links.</li>
+              <li>Front staircase (N0) and back staircase (N30) connect corridors across floors.</li>
+            </ul>
           </div>
         </section>
       </main>

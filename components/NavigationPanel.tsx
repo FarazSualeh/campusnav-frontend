@@ -17,6 +17,63 @@ interface NavigationPanelProps {
   initialStart?: NavLocation | null;
   initialDest?: NavLocation | null;
   onOpenQrModal?: (location: NavLocation) => void;
+  onFloorChange?: (floorId: string) => void;
+}
+
+interface WalkingStep {
+  icon: string;
+  text: string;
+  type: "walk" | "floor-change" | "start" | "end";
+  targetFloor?: string;
+}
+
+function generateWalkingSteps(
+  startLoc: NavLocation | null,
+  destLoc: NavLocation | null,
+  path: string[],
+  floorTransitions: { fromNode: string; toNode: string; fromFloor: string; toFloor: string }[]
+): WalkingStep[] {
+  if (!startLoc || !destLoc || path.length === 0) return [];
+
+  const steps: WalkingStep[] = [];
+
+  // Step 1: Start
+  steps.push({ icon: "📍", text: `Start at ${startLoc.name}`, type: "start" });
+
+  // Step 2: Walk along corridor
+  if (path.length > 2) {
+    steps.push({ icon: "🚶", text: "Walk along the corridor", type: "walk" });
+  }
+
+  // Steps for floor transitions
+  for (const transition of floorTransitions) {
+    const staircaseName = findLocation(transition.fromNode);
+    const fromFloorNum = parseInt(transition.fromFloor, 10);
+    const toFloorNum = parseInt(transition.toFloor, 10);
+    const direction = toFloorNum > fromFloorNum ? "up" : "down";
+    const arrow = direction === "up" ? "⬆️" : "⬇️";
+    const label = staircaseName ? staircaseName.name : "Staircase";
+
+    steps.push({
+      icon: "🚪",
+      text: `Reach ${label}`,
+      type: "walk",
+    });
+    steps.push({
+      icon: arrow,
+      text: `Go ${direction} to Floor ${transition.toFloor}`,
+      type: "floor-change",
+      targetFloor: transition.toFloor,
+    });
+
+    // After changing floor, continue along corridor
+    steps.push({ icon: "🚶", text: `Continue along Floor ${transition.toFloor} corridor`, type: "walk" });
+  }
+
+  // Step: Arrive
+  steps.push({ icon: "🏁", text: `Arrive at ${destLoc.name}`, type: "end" });
+
+  return steps;
 }
 
 const CATEGORIES = [
@@ -44,6 +101,7 @@ export default function NavigationPanel({
   initialStart,
   initialDest,
   onOpenQrModal,
+  onFloorChange,
 }: NavigationPanelProps) {
   const allLocations = useMemo(() => getLocations(), []);
 
@@ -273,7 +331,7 @@ export default function NavigationPanel({
           <p className="text-xs text-slate-500 mt-0.5">Engineering Building • Floors 2 &amp; 3</p>
         </div>
         <span className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 bg-amber-50 text-amber-800 rounded-full border border-amber-200/60">
-          KTC Campus
+          AIKTC Campus
         </span>
       </div>
 
@@ -596,16 +654,60 @@ export default function NavigationPanel({
             </button>
           </div>
 
+          {/* Floor Change Alert Banner */}
           {routeInfo.floorTransitions.length > 0 && (
-            <div className="border-t border-orange-200/40 pt-2 text-xs text-slate-700">
-              {routeInfo.floorTransitions.map((transition) => (
-                <div key={`${transition.fromNode}-${transition.toNode}`} className="flex items-center gap-2 font-semibold">
-                  <span aria-hidden="true">⇅</span>
-                  <span>Take the stairs to Floor {transition.toFloor}</span>
-                </div>
-              ))}
+            <div className="bg-amber-100 border border-amber-300 rounded-lg p-3 flex flex-col gap-2">
+              {routeInfo.floorTransitions.map((transition) => {
+                const fromFloorNum = parseInt(transition.fromFloor, 10);
+                const toFloorNum = parseInt(transition.toFloor, 10);
+                const arrow = toFloorNum > fromFloorNum ? "⬆️" : "⬇️";
+                return (
+                  <div key={`alert-${transition.fromNode}-${transition.toNode}`} className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
+                      <span>{arrow}</span>
+                      <span>Floor Change Required — reach the staircase, then switch to Floor {transition.toFloor}.</span>
+                    </div>
+                    {onFloorChange && (
+                      <button
+                        type="button"
+                        onClick={() => onFloorChange(transition.toFloor)}
+                        className="text-[11px] font-bold px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors flex items-center gap-1 cursor-pointer shadow-sm whitespace-nowrap"
+                      >
+                        <span>Switch to Floor {transition.toFloor}</span>
+                        <span>→</span>
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
+
+          {/* Step-by-Step Walking Instructions */}
+          <div className="border-t border-orange-200/40 pt-2">
+            <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+              Walking Directions
+            </div>
+            <ol className="flex flex-col gap-1.5">
+              {generateWalkingSteps(startLocation, destLocation, routeInfo.path, routeInfo.floorTransitions).map(
+                (step, idx) => (
+                  <li
+                    key={`step-${idx}`}
+                    className={`flex items-start gap-2 text-xs leading-relaxed ${
+                      step.type === "floor-change"
+                        ? "bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5 font-bold text-amber-900"
+                        : step.type === "start" || step.type === "end"
+                        ? "font-semibold text-slate-800"
+                        : "text-slate-600"
+                    }`}
+                  >
+                    <span className="shrink-0 mt-0.5">{step.icon}</span>
+                    <span>{step.text}</span>
+                  </li>
+                )
+              )}
+            </ol>
+          </div>
         </div>
       )}
 

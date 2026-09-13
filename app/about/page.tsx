@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     type: "profile",
     images: [
       {
-        url: "/campusnavlogo.png",
+        url: "/cnlogo.png",
         width: 1200,
         height: 630,
         alt: "CampusNav Creators",
@@ -83,7 +83,7 @@ export default function AboutPage() {
       />
       <nav className="nav shell about-nav" aria-label="Main navigation">
         <Link className="logo" href="/" aria-label="CampusNav home">
-          <Image src="/campusnavlogo.png" alt="CampusNav" width={108} height={66} />
+          <Image src="/cnlogo.png" alt="CampusNav" width={108} height={66} />
         </Link>
         <div className="nav-links">
           <Link href="/">Home</Link>
@@ -191,7 +191,7 @@ export default function AboutPage() {
 
       <footer className="footer shell">
         <div className="footer-brand" aria-label="CampusNav brand">
-          <Image src="/campusnavlogo.png" alt="" width={42} height={42} />
+          <Image src="/cnlogo.png" alt="" width={42} height={42} />
           <span>CampusNav</span>
         </div>
         <div className="footer-campus">Anjuman-i-Islam&apos;s<br />Kalsekar Technical Campus</div>

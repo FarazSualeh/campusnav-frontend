@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 
+
 function Logo() {
   return (
     <Link className="logo" href="/" aria-label="CampusNav home">
-      <Image src="/campusnavlogo.png" alt="CampusNav" width={108} height={66} />
+      <Image src="/cnlogo.png" alt="CampusNav" width={108} height={66} />
     </Link>
   );
 }
@@ -125,7 +126,7 @@ export default function Home() {
             <div className="map-path path-two" />
             <div className="map-pin">
               <span>◉</span>
-              <b>Staircase (Entrance)</b>
+              <b>Front Staircase</b>
             </div>
             <div className="map-destination">
               <span>✦</span>
@@ -231,7 +232,7 @@ export default function Home() {
 
       <footer className="footer shell">
         <div className="footer-brand" aria-label="CampusNav brand">
-          <Image src="/campusnavlogo.png" alt="" width={42} height={42} />
+          <Image src="/cnlogo.png" alt="" width={42} height={42} />
           <span>CampusNav</span>
         </div>
         <div className="footer-campus">

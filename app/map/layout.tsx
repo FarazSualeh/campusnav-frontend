@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/campusnavlogo.png",
+        url: "/cnlogo.png",
         width: 1200,
         height: 630,
         alt: "CampusNav Interactive Campus Map",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Interactive Campus Map & Live Indoor Navigation | CampusNav",
     description:
       "Live indoor routing for classrooms, labs, and facilities at AIKTC.",
-    images: ["/campusnavlogo.png"],
+    images: ["/cnlogo.png"],
   },
 };
 
