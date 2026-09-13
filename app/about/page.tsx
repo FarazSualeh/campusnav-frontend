@@ -3,16 +3,16 @@ import Link from "next/link";
 
 const creators = [
   {
-    image: "/farazpp.png",
+    image: "/farazs.jpg",
     name: "Faraz Sualeh",
-    role: "BSc IT student",
-    text: "Faraz built the maps and search experience — everything you see and interact with when finding your way around campus, from your first search to the final turn.",
-  }, 
+    role: "Frontend Developer, UI/UX designer, and Navigation System Handler",
+    text: "Faraz built the Maps, search, and navigation experience, from finding locations and selecting destinations to calculating the shortest route and guiding users with turn-by-turn directions.",
+  },
   {
     image: "/burhanp.jpg",
     name: "Burhan Parkar",
-    role: "BSc IT student",
-    text: "Burhan built the system that figures out the fastest route for you, working behind the scenes so every path you're shown actually makes sense.",
+    role: "Backend Developer, Database Manager and System Administrator",
+    text: "Burhan built the backend that powers CampusNav, managing the APIs, data flow, and database structure that keep locations and navigation information organized and accessible.",
   },
 ];
 

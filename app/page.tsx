@@ -209,7 +209,6 @@ export default function Home() {
           Anjuman-i-Islam&apos;s<br />Kalsekar Technical Campus
         </div>
         <div className="footer-right">
-          <span>AIKTC Indoor campus navigation system</span>
           <span>© 2026 CampusNav</span>
         </div>
       </footer>

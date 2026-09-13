@@ -172,7 +172,7 @@ CampusNav/
 ├── public/
 │   │── burhanp.jpg
 │   │── campusnavlogo.png
-│   └── farazpp.png
+│   └── farazs.png
 ├── Dockerfile
 ├── .dockerignore
 ├── package.json

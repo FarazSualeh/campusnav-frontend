@@ -88,6 +88,19 @@ function MapPageContent() {
 
         {/* Floor Switcher & Action buttons */}
         <div className="flex items-center gap-2">
+          <select
+            value={activeFloor}
+            onChange={(e) => handleFloorSelect(e.target.value)}
+            className="md:hidden bg-slate-100 py-1.5 px-2 rounded-lg text-xs font-bold text-slate-900 border-none outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
+            aria-label="Select Floor"
+          >
+            {FLOORS.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+
           <div className="hidden md:flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold">
             {FLOORS.map((f) => (
               <button
@@ -107,7 +120,7 @@ function MapPageContent() {
 
           <Link
             href="/"
-            className="text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors"
+            className="hidden sm:flex text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors"
           >
             ← Home
           </Link>
