@@ -1,5 +1,3 @@
-Absolutely. Here’s a clean, professional **README.md** you can paste directly into your CampusNav GitHub repository.
-
 ````markdown
 # 🧭 CampusNav
 
