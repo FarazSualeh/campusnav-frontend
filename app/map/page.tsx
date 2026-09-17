@@ -6,13 +6,14 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import FloorMap from "@/components/FloorMap";
 import Floor2Map from "@/components/Floor2Map";
+import Floor1Map from "@/components/Floor1Map";
 import NavigationPanel from "@/components/NavigationPanel";
 import QRCodeModal from "@/components/QRCodeModal";
 import { NavLocation, findLocation, findLocationByCodeOrId } from "@/lib/locations";
 
 const FLOORS = [
   { id: "G", label: "Ground", status: "Coming Soon" },
-  { id: "1", label: "Floor 1", status: "Coming Soon" },
+  { id: "1", label: "Floor 1", status: "Live", active: true },
   { id: "2", label: "Floor 2", status: "Live", active: true },
   { id: "3", label: "Floor 3", status: "Live", active: true },
 ];
@@ -38,8 +39,8 @@ function MapPageContent() {
   const [selectedFloor, setSelectedFloor] = useState<string | null>(null);
   const activeFloor = selectedFloor || (floorParam && FLOORS.some((f) => f.id === floorParam) ? floorParam : "3");
   const floorNotice =
-    activeFloor !== "3" && activeFloor !== "2"
-      ? `Floor ${activeFloor} blueprint is coming soon! Routing via Staircase (N0) for inter-floor transition.`
+    activeFloor !== "3" && activeFloor !== "2" && activeFloor !== "1"
+      ? `Floor ${activeFloor} blueprint is coming soon! Routing via staircase for inter-floor transition.`
       : null;
 
   // Modal for QR Code generation
@@ -78,8 +79,8 @@ function MapPageContent() {
           <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 pl-3 border-l border-slate-200">
             <span className="font-semibold text-slate-800">Engineering Building</span>
             <span>•</span>
-            <span className="bg-orange-100 text-orange-800 font-bold px-2 py-0.5 rounded-md text-[11px]">
-              Floor {activeFloor} {activeFloor === "3" || activeFloor === "2" ? "(Live)" : "(Transition Mode)"}
+              <span className="bg-orange-100 text-orange-800 font-bold px-2 py-0.5 rounded-md text-[11px]">
+              Floor {activeFloor} {activeFloor === "3" || activeFloor === "2" || activeFloor === "1" ? "(Live)" : "(Transition Mode)"}
             </span>
           </div>
         </div>
@@ -227,7 +228,17 @@ function MapPageContent() {
 
             {/* SVG Floor Map Component */}
             <div className="w-full max-w-3xl overflow-x-auto">
-              {activeFloor === "2" ? (
+              {activeFloor === "1" ? (
+                <Floor1Map
+                  routeNodeIds={routeData?.path || []}
+                  selectedRoomId={selectedRoomId}
+                  startRoomId={routeData?.startLoc?.id || null}
+                  destinationRoomId={routeData?.destLoc?.id || null}
+                  startNodeId={routeData?.startLoc?.nodeId || null}
+                  destinationNodeId={routeData?.destLoc?.nodeId || null}
+                  onRoomClick={handleRoomClick}
+                />
+              ) : activeFloor === "2" ? (
                 <Floor2Map
                   routeNodeIds={routeData?.path || []}
                   selectedRoomId={selectedRoomId}

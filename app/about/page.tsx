@@ -152,7 +152,7 @@ export default function AboutPage() {
             New students, visitors and even regulars can lose time finding classrooms, labs, offices and facilities across a busy campus. CampusNav was built to make those first few minutes simpler: search for a destination, understand where it is, and follow a clear path to get there.
           </p>
           <p>
-            Starting with the Engineering Building&apos;s second and third floors, the platform brings the campus map into one focused, student-friendly experience.
+            Starting with the Engineering Building&apos;s first, second and third floors, the platform brings the campus map into one focused, student-friendly experience.
           </p>
           <Link className="text-link cta-link" href="/map">Open the interactive map <Arrow /></Link>
         </div>

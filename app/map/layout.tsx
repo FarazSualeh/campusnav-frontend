@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   keywords: [
     "AIKTC campus map",
     "indoor navigation map",
+    "Floor 1 floorplan",
     "Floor 2 floorplan",
     "Floor 3 floorplan",
     "Kalsekar Technical Campus navigation",

@@ -72,15 +72,15 @@ export const metadata: Metadata = {
     title: "CampusNav | Indoor Campus Navigation for AIKTC, Panvel",
     description:
       "Indoor routing and room search for Kalsekar Technical Campus.",
-    images: ["/ cnlogo.png"],
+    images: ["/cnlogo.png"],
   },
   icons: {
     icon: [
-      { url: "/cnlogo.png", type: "image/png" },
+      { url: "/favicon.ico", type: "image/x-icon" },
     ],
-    shortcut: ["/cnlogo.png"],
+    shortcut: ["/favicon.ico"],
     apple: [
-      { url: "/cnlogo.png", sizes: "210x210", type: "image/png" },
+      { url: "/favicon.ico", sizes: "180x180", type: "image/x-icon" },
     ],
   },
   robots: {
