@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const start = searchParams.get("start");
   const end = searchParams.get("end");
+  const floor = searchParams.get("floor") || undefined;
 
   if (!start || !end) {
     return NextResponse.json(
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const result = findShortestPath(start, end);
+    const result = findShortestPath(start, end, floor);
 
     if (!result.path || result.path.length === 0) {
       return NextResponse.json(

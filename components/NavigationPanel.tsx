@@ -249,21 +249,23 @@ export default function NavigationPanel({
 
     const startNode = startLocation.nodeId;
     const endNode = destLocation.nodeId;
+    const routeFloor = startLocation.floor === destLocation.floor ? startLocation.floor : undefined;
 
     try {
       // First attempt Next.js API route /api/route?start=...&end=...
       let data: { path: string[]; totalDistance: number; floorTransitions?: { fromNode: string; toNode: string; fromFloor: string; toFloor: string }[] };
       try {
-        const response = await fetch(`/api/route?start=${encodeURIComponent(startNode)}&end=${encodeURIComponent(endNode)}`);
+        const floorParam = routeFloor ? `&floor=${encodeURIComponent(routeFloor)}` : "";
+        const response = await fetch(`/api/route?start=${encodeURIComponent(startNode)}&end=${encodeURIComponent(endNode)}${floorParam}`);
         if (response.ok) {
           data = await response.json();
         } else {
           // Fallback to local Dijkstra calculation
-          data = findShortestPath(startNode, endNode);
+          data = findShortestPath(startNode, endNode, routeFloor);
         }
       } catch {
         // Fallback to local Dijkstra calculation if network error
-        data = findShortestPath(startNode, endNode);
+        data = findShortestPath(startNode, endNode, routeFloor);
       }
 
       if (!data.path || data.path.length === 0) {
