@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { FLOOR_2_WIDTH, FLOOR_2_HEIGHT, floor2Rooms, floor2Nodes, floor2Edges, floor2RoomToNode } from "@/lib/floor2Data";
+import { useRouteViewBox } from "@/lib/useRouteViewBox";
 
 const COLORS = {
   Lab: { fill: "#EAF3EC", stroke: "#7FA88B", text: "#243E2C" },
@@ -9,6 +10,7 @@ const COLORS = {
   Washroom: { fill: "#EAF2F8", stroke: "#9BB7CD", text: "#2C4355" },
   Admin: { fill: "#F5EBE6", stroke: "#CCA890", text: "#523B2B" },
 };
+const FEMALE_WASHROOM_COLORS = { fill: "#FCE4EC", stroke: "#C2185B", text: "#880E4F" };
 const STAIRCASE_IDS = { "LOC-F2-FRONT-STAIRCASE": "F2-N0", "LOC-F2-BACK-STAIRCASE": "F2-S1" };
 
 /**
@@ -21,6 +23,12 @@ const STAIRCASE_IDS = { "LOC-F2-FRONT-STAIRCASE": "F2-N0", "LOC-F2-BACK-STAIRCAS
 export default function Floor2Map({ routeNodeIds = [], selectedRoomId = null, startRoomId = null, destinationRoomId = null, startNodeId = null, destinationNodeId = null, onRoomClick }) {
   const [hoveredRoom, setHoveredRoom] = useState(null);
   const byId = Object.fromEntries(floor2Nodes.map((node) => [node.id, node]));
+  const { viewBox, showFullFloor, isFramed, pointerHandlers } = useRouteViewBox({
+    routeNodeIds,
+    nodes: floor2Nodes,
+    width: FLOOR_2_WIDTH,
+    height: FLOOR_2_HEIGHT,
+  });
   const startId = startNodeId || STAIRCASE_IDS[startRoomId] || floor2RoomToNode[startRoomId];
   const endId = destinationNodeId || STAIRCASE_IDS[destinationRoomId] || floor2RoomToNode[destinationRoomId];
   const routeSegments = routeNodeIds.slice(1).map((id, index) => [byId[routeNodeIds[index]], byId[id]]).filter(([a, b]) => a && b);
@@ -35,7 +43,12 @@ export default function Floor2Map({ routeNodeIds = [], selectedRoomId = null, st
 
   return (
     <div className="relative w-full max-w-full overflow-hidden select-none">
-      <svg viewBox={`0 0 ${FLOOR_2_WIDTH} ${FLOOR_2_HEIGHT}`} role="img" aria-label="Interactive map of 2nd Floor, Engineering Building" className="w-full h-auto drop-shadow-sm">
+      {routeNodeIds.length > 0 && isFramed && (
+        <button type="button" onClick={showFullFloor} className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50">
+          Show full floor
+        </button>
+      )}
+      <svg viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`} {...pointerHandlers} role="img" aria-label="Interactive map of 2nd Floor, Engineering Building" className="w-full h-auto drop-shadow-sm touch-none">
         <rect width={FLOOR_2_WIDTH} height={FLOOR_2_HEIGHT} rx="12" fill="#FAF8F5" stroke="#E5E0D5" strokeWidth="2" />
         <g stroke="#DDD8CB" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round">
           {floor2Edges.map(([a, b]) => byId[a] && byId[b] && <line key={`${a}-${b}`} x1={byId[a].x} y1={byId[a].y} x2={byId[b].x} y2={byId[b].y} />)}
@@ -55,7 +68,9 @@ export default function Floor2Map({ routeNodeIds = [], selectedRoomId = null, st
         <g fill="#7A735E" fontSize="8" fontWeight="700" textAnchor="middle"><text x="210" y="270">CUT OUT</text><text x="515" y="270">CUT OUT</text></g>
 
         {floor2Rooms.map((room) => {
-          const colors = COLORS[room.category] || COLORS.Admin;
+          const colors = room.id === "F2-GIRLS"
+            ? FEMALE_WASHROOM_COLORS
+            : COLORS[room.category] || COLORS.Admin;
           const active = room.id === selectedRoomId || room.id === startRoomId || room.id === destinationRoomId || hoveredRoom === room.id;
           return <g key={room.id} onClick={() => onRoomClick?.(room.id)} onMouseEnter={() => setHoveredRoom(room.id)} onMouseLeave={() => setHoveredRoom(null)} style={{ cursor: "pointer" }}>
             <rect x={room.x} y={room.y} width={room.w} height={room.h} rx="5" fill={colors.fill} stroke={active ? "#C1571F" : colors.stroke} strokeWidth={active ? "2.5" : "1.2"} />

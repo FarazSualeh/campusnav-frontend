@@ -1,8 +1,9 @@
 // components/FloorMap.jsx
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { rooms, nodes, edges, roomToNode, FLOOR_WIDTH, FLOOR_HEIGHT } from "@/lib/floorData";
+import { useRouteViewBox } from "@/lib/useRouteViewBox";
 
 // Architectural palette tailored for KTC campus map
 const CATEGORY_COLORS = {
@@ -21,12 +22,6 @@ const ROUTE_COLOR = "#C1571F";
 const ROUTE_GLOW_COLOR = "#F4A261";
 const START_COLOR = "#2A9D8F";
 const END_COLOR = "#EF4444";
-const DESKTOP_BREAKPOINT = 1024;
-const ROUTE_PADDING = 0.18;
-const ROUTE_EXTRA_ZOOM = 0.82;
-const START_FOCUS_BIAS = 0.3;
-const VIEWBOX_ASPECT = FLOOR_WIDTH / FLOOR_HEIGHT;
-const FULL_FLOOR_VIEWBOX = { x: 0, y: 0, width: FLOOR_WIDTH, height: FLOOR_HEIGHT };
 const STAIRCASE_NODE_IDS = {
   "LOC-STAIRCASE-3": "N0",
   "LOC-BACK-STAIRCASE-3": "N30",
@@ -54,44 +49,14 @@ export default function FloorMap({
   onRoomClick,
 }) {
   const [hoveredRoom, setHoveredRoom] = useState(null);
-  const [viewBox, setViewBox] = useState(FULL_FLOOR_VIEWBOX);
-  const animationFrameRef = useRef(null);
-  const previousRouteKeyRef = useRef("");
-  const viewBoxRef = useRef(FULL_FLOOR_VIEWBOX);
 
   const nodeById = useMemo(() => Object.fromEntries(nodes.map((n) => [n.id, n])), []);
-
-  useEffect(() => {
-    viewBoxRef.current = viewBox;
-  }, [viewBox]);
-
-  useEffect(() => {
-    const routeKey = routeNodeIds.join("|");
-    if (!routeKey) {
-      previousRouteKeyRef.current = "";
-      if (viewBoxRef.current.width < FLOOR_WIDTH) {
-        animateViewBox(viewBoxRef.current, FULL_FLOOR_VIEWBOX, setViewBox, animationFrameRef);
-      }
-      return;
-    }
-    if (routeKey === previousRouteKeyRef.current) return;
-    previousRouteKeyRef.current = routeKey;
-
-    if (window.matchMedia(`(max-width: ${DESKTOP_BREAKPOINT - 1}px)`).matches) {
-      const routeNodes = routeNodeIds.map((id) => nodeById[id]).filter(Boolean);
-      if (routeNodes.length > 0) {
-        animateViewBox(viewBoxRef.current, getRouteViewBox(routeNodes), setViewBox, animationFrameRef);
-      }
-    }
-  }, [routeNodeIds, nodeById]);
-
-  useEffect(() => () => {
-    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-  }, []);
-
-  const showFullFloor = () => {
-    animateViewBox(viewBox, FULL_FLOOR_VIEWBOX, setViewBox, animationFrameRef);
-  };
+  const { viewBox, showFullFloor, isFramed, pointerHandlers } = useRouteViewBox({
+    routeNodeIds,
+    nodes,
+    width: FLOOR_WIDTH,
+    height: FLOOR_HEIGHT,
+  });
 
   // Build route line segments
   const routeSegments = [];
@@ -111,7 +76,7 @@ export default function FloorMap({
 
   return (
     <div className="relative w-full max-w-full overflow-hidden select-none">
-      {routeNodeIds.length > 0 && viewBox.width < FLOOR_WIDTH - 1 && (
+      {routeNodeIds.length > 0 && isFramed && (
         <button
           type="button"
           onClick={showFullFloor}
@@ -122,9 +87,10 @@ export default function FloorMap({
       )}
       <svg
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
+        {...pointerHandlers}
         role="img"
         aria-label="Interactive map of 3rd Floor, Engineering Building, Kalsekar Technical Campus"
-        className="w-full h-auto drop-shadow-sm transition-all duration-300"
+        className="w-full h-auto drop-shadow-sm transition-all duration-300 touch-none"
         style={{ fontFamily: "var(--font-sans, system-ui, -apple-system, sans-serif)" }}
       >
         <title>Engineering Building - 3rd Floor Floorplan</title>
@@ -416,64 +382,6 @@ export default function FloorMap({
       </svg>
     </div>
   );
-}
-
-function getRouteViewBox(routeNodes) {
-  const xs = routeNodes.map((node) => node.x);
-  const ys = routeNodes.map((node) => node.y);
-  const minX = Math.min(...xs);
-  const maxX = Math.max(...xs);
-  const minY = Math.min(...ys);
-  const maxY = Math.max(...ys);
-  const routeWidth = Math.max(maxX - minX, 40);
-  const routeHeight = Math.max(maxY - minY, 40);
-  let width = routeWidth * (1 + ROUTE_PADDING * 2);
-  let height = routeHeight * (1 + ROUTE_PADDING * 2);
-
-  if (width / height > VIEWBOX_ASPECT) height = width / VIEWBOX_ASPECT;
-  else width = height * VIEWBOX_ASPECT;
-
-  width *= ROUTE_EXTRA_ZOOM;
-  height *= ROUTE_EXTRA_ZOOM;
-  width = Math.min(width, FLOOR_WIDTH);
-  height = Math.min(height, FLOOR_HEIGHT);
-
-  const routeCenterX = (minX + maxX) / 2;
-  const routeCenterY = (minY + maxY) / 2;
-  const startNode = routeNodes[0];
-  const focusX = routeCenterX + (startNode.x - routeCenterX) * START_FOCUS_BIAS;
-  const focusY = routeCenterY + (startNode.y - routeCenterY) * START_FOCUS_BIAS;
-
-  return {
-    x: clamp(focusX - width / 2, 0, FLOOR_WIDTH - width),
-    y: clamp(focusY - height / 2, 0, FLOOR_HEIGHT - height),
-    width,
-    height,
-  };
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(value, max));
-}
-
-function animateViewBox(from, to, setViewBox, animationFrameRef) {
-  if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-  const start = performance.now();
-  const duration = 450;
-
-  const step = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    setViewBox({
-      x: from.x + (to.x - from.x) * eased,
-      y: from.y + (to.y - from.y) * eased,
-      width: from.width + (to.width - from.width) * eased,
-      height: from.height + (to.height - from.height) * eased,
-    });
-    if (progress < 1) animationFrameRef.current = requestAnimationFrame(step);
-  };
-
-  animationFrameRef.current = requestAnimationFrame(step);
 }
 
 /**

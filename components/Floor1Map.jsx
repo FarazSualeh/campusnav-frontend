@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouteViewBox } from "@/lib/useRouteViewBox";
 import {
   FLOOR_1_HEIGHT,
   FLOOR_1_WIDTH,
@@ -16,6 +17,7 @@ const COLORS = {
   Washroom: { fill: "#EAF2F8", stroke: "#9BB7CD", text: "#2C4355" },
   Admin: { fill: "#F5EBE6", stroke: "#CCA890", text: "#523B2B" },
 };
+const FEMALE_WASHROOM_COLORS = { fill: "#FCE4EC", stroke: "#C2185B", text: "#880E4F" };
 
 const STAIRCASE_IDS = {
   "LOC-F1-FRONT-STAIRCASE": "F1-N0",
@@ -40,6 +42,12 @@ export default function Floor1Map({
 }) {
   const [hoveredRoom, setHoveredRoom] = useState(null);
   const byId = Object.fromEntries(floor1Nodes.map((node) => [node.id, node]));
+  const { viewBox, showFullFloor, isFramed, pointerHandlers } = useRouteViewBox({
+    routeNodeIds,
+    nodes: floor1Nodes,
+    width: FLOOR_1_WIDTH,
+    height: FLOOR_1_HEIGHT,
+  });
   const startId = startNodeId || STAIRCASE_IDS[startRoomId] || floor1RoomToNode[startRoomId];
   const endId = destinationNodeId || STAIRCASE_IDS[destinationRoomId] || floor1RoomToNode[destinationRoomId];
   const routeSegments = routeNodeIds
@@ -57,7 +65,12 @@ export default function Floor1Map({
 
   return (
     <div className="relative w-full max-w-full overflow-hidden select-none">
-      <svg viewBox={`0 0 ${FLOOR_1_WIDTH} ${FLOOR_1_HEIGHT}`} role="img" aria-label="Interactive map of 1st Floor, Engineering Building" className="w-full h-auto drop-shadow-sm">
+      {routeNodeIds.length > 0 && isFramed && (
+        <button type="button" onClick={showFullFloor} className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50">
+          Show full floor
+        </button>
+      )}
+      <svg viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`} {...pointerHandlers} role="img" aria-label="Interactive map of 1st Floor, Engineering Building" className="w-full h-auto drop-shadow-sm touch-none">
         <rect width={FLOOR_1_WIDTH} height={FLOOR_1_HEIGHT} rx="12" fill="#FAF8F5" stroke="#E5E0D5" strokeWidth="2" />
 
         <g stroke="#DDD8CB" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round">
@@ -80,7 +93,9 @@ export default function Floor1Map({
         </g>
 
         {floor1Rooms.map((room) => {
-          const colors = COLORS[room.category] || COLORS.Admin;
+          const colors = room.id === "F1-FEMALE-STAFF"
+            ? FEMALE_WASHROOM_COLORS
+            : COLORS[room.category] || COLORS.Admin;
           const active = room.id === selectedRoomId || room.id === startRoomId || room.id === destinationRoomId || hoveredRoom === room.id;
           return (
             <g
