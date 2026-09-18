@@ -23,7 +23,7 @@ const STAIRCASE_IDS = { "LOC-F2-FRONT-STAIRCASE": "F2-N0", "LOC-F2-BACK-STAIRCAS
 export default function Floor2Map({ routeNodeIds = [], selectedRoomId = null, startRoomId = null, destinationRoomId = null, startNodeId = null, destinationNodeId = null, onRoomClick }) {
   const [hoveredRoom, setHoveredRoom] = useState(null);
   const byId = Object.fromEntries(floor2Nodes.map((node) => [node.id, node]));
-  const { viewBox, showFullFloor, isFramed, pointerHandlers } = useRouteViewBox({
+  const { viewBox, showFullFloor, focusRoute, isFramed, pointerHandlers } = useRouteViewBox({
     routeNodeIds,
     nodes: floor2Nodes,
     width: FLOOR_2_WIDTH,
@@ -43,9 +43,9 @@ export default function Floor2Map({ routeNodeIds = [], selectedRoomId = null, st
 
   return (
     <div className="relative w-full max-w-full overflow-hidden select-none">
-      {routeNodeIds.length > 0 && isFramed && (
-        <button type="button" onClick={showFullFloor} className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50">
-          Show full floor
+      {routeNodeIds.length > 0 && (
+        <button type="button" onClick={isFramed ? showFullFloor : focusRoute} className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50">
+          {isFramed ? "Show full floor" : "Focus route"}
         </button>
       )}
       <svg viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`} {...pointerHandlers} role="img" aria-label="Interactive map of 2nd Floor, Engineering Building" className="w-full h-auto drop-shadow-sm touch-none">
@@ -62,8 +62,8 @@ export default function Floor2Map({ routeNodeIds = [], selectedRoomId = null, st
 
         {/* The two atriums remain voids: their dotted outlines are not interactive rooms. */}
         <g fill="#F1EEE5" stroke="#C9C2B4" strokeWidth="1.5" strokeDasharray="5 4">
-          <rect x="135" y="145" width="150" height="250" rx="3" />
-          <rect x="445" y="145" width="140" height="250" rx="3" />
+          <rect x="100" y="110" width="200" height="355" rx="3" />
+          <rect x="398" y="110" width="200" height="355" rx="3" />
         </g>
         <g fill="#7A735E" fontSize="8" fontWeight="700" textAnchor="middle"><text x="210" y="270">CUT OUT</text><text x="515" y="270">CUT OUT</text></g>
 

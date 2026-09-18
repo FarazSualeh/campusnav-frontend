@@ -51,7 +51,7 @@ export default function FloorMap({
   const [hoveredRoom, setHoveredRoom] = useState(null);
 
   const nodeById = useMemo(() => Object.fromEntries(nodes.map((n) => [n.id, n])), []);
-  const { viewBox, showFullFloor, isFramed, pointerHandlers } = useRouteViewBox({
+  const { viewBox, showFullFloor, focusRoute, isFramed, pointerHandlers } = useRouteViewBox({
     routeNodeIds,
     nodes,
     width: FLOOR_WIDTH,
@@ -76,13 +76,13 @@ export default function FloorMap({
 
   return (
     <div className="relative w-full max-w-full overflow-hidden select-none">
-      {routeNodeIds.length > 0 && isFramed && (
+      {routeNodeIds.length > 0 && (
         <button
           type="button"
-          onClick={showFullFloor}
+          onClick={isFramed ? showFullFloor : focusRoute}
           className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50"
         >
-          Show full floor
+          {isFramed ? "Show full floor" : "Focus route"}
         </button>
       )}
       <svg

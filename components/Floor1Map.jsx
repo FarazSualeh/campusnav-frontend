@@ -42,7 +42,7 @@ export default function Floor1Map({
 }) {
   const [hoveredRoom, setHoveredRoom] = useState(null);
   const byId = Object.fromEntries(floor1Nodes.map((node) => [node.id, node]));
-  const { viewBox, showFullFloor, isFramed, pointerHandlers } = useRouteViewBox({
+  const { viewBox, showFullFloor, focusRoute, isFramed, pointerHandlers } = useRouteViewBox({
     routeNodeIds,
     nodes: floor1Nodes,
     width: FLOOR_1_WIDTH,
@@ -65,9 +65,9 @@ export default function Floor1Map({
 
   return (
     <div className="relative w-full max-w-full overflow-hidden select-none">
-      {routeNodeIds.length > 0 && isFramed && (
-        <button type="button" onClick={showFullFloor} className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50">
-          Show full floor
+      {routeNodeIds.length > 0 && (
+        <button type="button" onClick={isFramed ? showFullFloor : focusRoute} className="absolute right-3 top-3 z-10 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-md backdrop-blur transition-colors hover:bg-slate-50">
+          {isFramed ? "Show full floor" : "Focus route"}
         </button>
       )}
       <svg viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`} {...pointerHandlers} role="img" aria-label="Interactive map of 1st Floor, Engineering Building" className="w-full h-auto drop-shadow-sm touch-none">
