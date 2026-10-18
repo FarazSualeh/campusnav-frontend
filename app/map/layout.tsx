@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "/map",
+    languages: {
+      en: "/map",
+      "x-default": "/map",
+    },
   },
   openGraph: {
     title: "Interactive Campus Map & Live Indoor Navigation | CampusNav",

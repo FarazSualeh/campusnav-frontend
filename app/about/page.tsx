@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "/about",
+    languages: {
+      en: "/about",
+      "x-default": "/about",
+    },
   },
   openGraph: {
     title: "About CampusNav | Team, Tech Stack & Story",
@@ -62,7 +66,7 @@ export default function AboutPage() {
     "mainEntity": {
       "@type": "SoftwareApplication",
       "name": "CampusNav",
-      "applicationCategory": "NavigationApplication",
+      "applicationCategory": "TravelApplication",
       "operatingSystem": "Web",
       "description":
         "Indoor campus navigation system for Anjuman-i-Islam's Kalsekar Technical Campus.",

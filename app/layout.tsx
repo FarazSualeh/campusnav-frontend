@@ -50,6 +50,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/",
+    languages: {
+      en: "/",
+      "x-default": "/",
+    },
   },
   openGraph: {
     type: "website",
@@ -105,7 +109,7 @@ const jsonLdWebsite = {
       "@id": `${baseUrl}/#webapp`,
       "name": "CampusNav",
       "url": baseUrl,
-      "applicationCategory": "NavigationApplication",
+      "applicationCategory": "TravelApplication",
       "operatingSystem": "All",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "description":
