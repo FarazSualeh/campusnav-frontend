@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | CampusNav",
   },
   description:
-    "An indoor navigation system for Anjuman-i-Islam's Kalsekar Technical Campus (AIKTC). Search classrooms, labs, offices and navigate across floors with shortest-path routing.",
+    "Find classrooms, labs, offices, and facilities with indoor navigation across AIKTC's Kalsekar Technical Campus.",
   keywords: [
     "CampusNav",
     "Indoor Navigation",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     siteName: "CampusNav",
     title: "CampusNav | Indoor Campus Navigation for AIKTC, Panvel",
     description:
-      "Find classrooms, labs, faculty rooms, and navigate across floors at Anjuman-i-Islam's Kalsekar Technical Campus.",
+      "Find classrooms, labs, offices, and facilities with indoor navigation across AIKTC's Kalsekar Technical Campus.",
     images: [
       {
         url: "/cnlogo.png",
