@@ -12,7 +12,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://campusnav.vercel.app";
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://kalsekarcampusnav.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -37,8 +38,8 @@ export const metadata: Metadata = {
     "New Panvel college map",
   ],
   authors: [
-    { name: "Faraz Sualeh", url: "https://campusnav.vercel.app/about" },
-    { name: "Burhan Parkar", url: "https://campusnav.vercel.app/about" },
+    { name: "Faraz Sualeh", url: `${baseUrl}/about` },
+    { name: "Burhan Parkar", url: `${baseUrl}/about` },
   ],
   creator: "Faraz Sualeh & Burhan Parkar",
   publisher: "CampusNav",

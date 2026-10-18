@@ -191,7 +191,7 @@ export default function AboutPage() {
 
       <footer className="footer shell">
         <div className="footer-brand" aria-label="CampusNav brand">
-          <Image src="/cnlogo.png" alt="" width={42} height={42} />
+          <Image src="/cnlogo.png" alt="CampusNav logo" width={42} height={42} />
           <span>CampusNav</span>
         </div>
         <div className="footer-campus">Anjuman-i-Islam&apos;s<br />Kalsekar Technical Campus</div>

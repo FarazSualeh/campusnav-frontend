@@ -11,9 +11,9 @@ CampusNav provides web-based indoor navigation, classroom and laboratory lookup,
 - **Location QR Codes**: Scannable QR links to share starting points or destinations with others.
 
 ## Pages & Links
-- [Home](https://campusnav.vercel.app/): Overview, campus departments, and FAQ.
-- [Interactive Map](https://campusnav.vercel.app/map): Live floor navigation and room finder.
-- [About Us](https://campusnav.vercel.app/about): About the creators, tech stack, and background.
+- [Home](https://kalsekarcampusnav.vercel.app/): Overview, campus departments, and FAQ.
+- [Interactive Map](https://kalsekarcampusnav.vercel.app/map): Live floor navigation and room finder.
+- [About Us](https://kalsekarcampusnav.vercel.app/about): About the creators, tech stack, and background.
 
 ## Technology Stack
 - Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS
